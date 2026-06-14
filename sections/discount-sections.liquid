@@ -1753,15 +1753,39 @@ lockedRows.forEach(row => {
       }
       if (mainReserveBtn) { mainReserveBtn.disabled = true; mainReserveBtn.textContent = 'Adding…'; }
       try {
+        if (discountCode) {
+          try {
+            await fetch(`/discount/${encodeURIComponent(discountCode)}`);
+          } catch (e) {
+            console.error('Failed to apply discount in background:', e);
+          }
+        }
+
         const res = await fetch('/cart/add.js', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
           body: JSON.stringify({ id: selectedVariant.id, quantity: 1, properties: { '_Circle phase': `Phase ${activePhase}`, '_Circle discount': discountPercent ? `${discountPercent}%` : 'None' } })
         });
         if (!res.ok) throw new Error('Cart error');
-        window.location.href = discountCode
-          ? `/discount/${encodeURIComponent(discountCode)}?redirect=/cart`
-          : '/cart';
+
+        // Trigger the theme's built-in AJAX cart drawer state update
+        document.body.dispatchEvent(new CustomEvent('baseline:modalcart:afteradditem'));
+
+        // Unconditionally open the cart drawer using the theme's Spruce store
+        if (window.Spruce && window.Spruce.store('drawer')) {
+          window.Spruce.store('drawer').cartDrawerOpen = true;
+        }
+
+        // Reset button state
+        if (mainReserveBtn) {
+          mainReserveBtn.disabled = false;
+          if (discountPercent > 0) {
+            mainReserveBtn.textContent = `Reserve — lock in ${discountPercent}% off`;
+          } else {
+            const vLabel = selectedVariant.title === 'Default Title' ? '' : ` — ${selectedVariant.title}`;
+            mainReserveBtn.textContent = `Reserve${vLabel}`;
+          }
+        }
       } catch(err) {
         console.error(err);
         if (mainReserveBtn) { mainReserveBtn.disabled = false; mainReserveBtn.textContent = 'Try again'; }
