@@ -463,8 +463,6 @@
               </button>
             </div>
 
-            {% comment %} <div class="circle-scarcity" data-scarcity-text>Select a product above to see availability.</div> {% endcomment %}
-
             <button type="button" class="circle-cta-btn" data-reserve-main>
               {{ section.settings.reserve_button_text }}
             </button>
@@ -485,9 +483,7 @@
               <div class="circle-locked-right">
                 <div class="circle-locked-price-wrapper">
                   <span class="circle-locked-price-amount" data-locked-price-2 data-phase-discount="{{ p2_d }}">—</span>
-                  {% comment %} <span class="circle-locked-badge" data-locked-badge-2></span> {% endcomment %}
                 </div>
-                {% comment %} <div class="locked-when" data-locked-when-2>{{ section.settings.phase_2_ships_note | default: 'Ships in ~30–40 days' }}</div> {% endcomment %}
               </div>
             </div>
 
@@ -505,9 +501,7 @@
                     <span class="circle-locked-price-amount" data-locked-price-3 data-phase-discount="{{ p3_d }}"
                       >—</span
                     >
-                    {% comment %} <span class="circle-locked-badge" data-locked-badge-3></span> {% endcomment %}
                   </div>
-                  {% comment %} <div class="locked-when" data-locked-when-3>{{ section.settings.phase_3_ships_note | default: 'Ships in ~40–50 days' }}</div> {% endcomment %}
                 </div>
               </div>
             {% endif %}
@@ -525,9 +519,7 @@
                 <div class="circle-locked-right">
                   <div class="circle-locked-price-wrapper">
                     <span class="circle-locked-price-amount" data-locked-price data-phase-discount="{{ p3_d }}">—</span>
-                    {% comment %} <span class="circle-locked-badge" data-locked-badge></span> {% endcomment %}
                   </div>
-                  {% comment %} <div class="locked-when" data-locked-when>{{ section.settings.phase_3_ships_note | default: 'Ships in ~30–40 days' }}</div> {% endcomment %}
                 </div>
               </div>
             {% else %}
@@ -542,9 +534,7 @@
                 <div class="circle-locked-right">
                   <div class="circle-locked-price-wrapper">
                     <span class="circle-locked-price-amount" data-locked-price data-phase-discount="0">—</span>
-                    {% comment %} <span class="circle-locked-badge" data-locked-badge>Full price</span> {% endcomment %}
                   </div>
-                  {% comment %} <div class="locked-when" data-locked-when>{{ section.settings.public_release_tag | default: 'Coming soon' }}</div> {% endcomment %}
                 </div>
               </div>
             {% endif %}
@@ -793,76 +783,10 @@
     border-left: 1.5px solid var(--forest);
   }
 
-
   .locked-when {
     font-size: 9px;
     letter-spacing: 0.08em;
     color: var(--faint);
-  }
-
-
-
-  /* ── LOCKED / NEXT DROP ROW WITH MULTIPLE DROPS ── */
-  .circle-{{ sid }} .circle-locked-drop-group {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    align-items: flex-end;
-  }
-
-  .circle-{{ sid }} .circle-locked-drop-item {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    gap: 5px;
-  }
-
-  .circle-{{ sid }} .circle-locked-drop-name {
-    font-size: 9px;
-    letter-spacing: .2em;
-    text-transform: uppercase;
-    color: {{ section.settings.muted_color }};
-    margin-bottom: 2px;
-  }
-
-  .circle-{{ sid }} .circle-locked-price-amount {
-    font-family: "Cormorant Garamond", serif;
-    font-size: 20px;
-    font-weight: 600;
-    color: {{ section.settings.accent_color }};
-    white-space: nowrap;
-  }
-
-  .circle-{{ sid }} .circle-locked-drop-item .circle-locked-badge {
-    font-family: "DM Mono", monospace;
-    font-size: 8px;
-    letter-spacing: .14em;
-    text-transform: uppercase;
-    color: {{ section.settings.accent_color }};
-    background: rgba(26,58,42,.07);
-    padding: 2px 7px;
-    border-radius: 4px;
-    font-weight: 400;
-    display: inline-block;
-    margin-left: 8px;
-  }
-
-  .circle-{{ sid }} .circle-locked-drop-item .locked-when {
-    font-size: 8px;
-    letter-spacing: 0.08em;
-    color: {{ section.settings.faint | default: '#c4c1bc' }};
-  }
-
-  @media (max-width: 480px) {
-    .circle-{{ sid }} .circle-locked-drop-group {
-      align-items: flex-start;
-      width: 100%;
-    }
-
-    .circle-{{ sid }} .circle-locked-drop-item {
-      align-items: flex-start;
-      width: 100%;
-    }
   }
 
   /* ── BASE ── */
@@ -878,7 +802,6 @@
 
     /* ── NAV ── */
     .circle-{{ sid }} .circle-nav { display: flex; justify-content: flex-end; align-items: center; gap: 16px; padding-top: 25px; }
-    .circle-{{ sid }} .circle-logo { font-family: "Cormorant Garamond", serif; font-weight: 300; font-size: 13px; letter-spacing: .4em; text-transform: uppercase; color: {{ section.settings.muted_color }}; margin-right: auto; }
     .circle-{{ sid }} .circle-nav-right { display: flex; align-items: center; gap: 16px; }
     .circle-{{ sid }} .circle-member-pill { font-size: 9px; letter-spacing: .18em; text-transform: uppercase; color: {{ section.settings.accent_color }}; border: 0.5px solid rgba(26,58,42,0.28); padding: 5px 14px; border-radius: 99px; }
     .circle-{{ sid }} .circle-signout { font-size: 9px; letter-spacing: .14em; text-transform: uppercase; color: {{ section.settings.muted_color }}; text-decoration: none; transition: color .15s; }
@@ -892,10 +815,9 @@
     .circle-{{ sid }} h1 { font-family: "Cormorant Garamond", serif; font-weight: 300; font-size: clamp(40px,9vw,52px); line-height: 1.06; letter-spacing: .015em; margin: 0 0 18px; }
     .circle-{{ sid }} h1 em { color: {{ section.settings.accent_color }}; font-style: italic; }
     .circle-{{ sid }} .circle-hero-sub { font-size: 12px; color: {{ section.settings.muted_color }}; letter-spacing: .03em; line-height: 1.85; padding-left: 16px; border-left: 1.5px solid {{ section.settings.accent_color }}; }
-    .circle-{{ sid }} .circle-hero-sub span { color: {{ section.settings.accent_color }}; }
 
     /* ── DROP STRIP ── */
-    .circle-{{ sid }} .circle-drop-strip { display: grid; grid-template-columns: repeat(3,1fr); gap: 1px; background: {{ section.settings.border_color }}; border-radius: 14px; overflow: hidden; margin-bottom: 36px; }
+    .circle-{{ sid }} .circle-drop-strip { display: grid; gap: 1px; background: {{ section.settings.border_color }}; border-radius: 14px; overflow: hidden; margin-bottom: 36px; }
     .circle-{{ sid }} .circle-drop-cell { background: {{ section.settings.card_color }}; padding: 22px 16px 20px; text-align: center; transition: background .15s; }
     .circle-{{ sid }} .circle-drop-cell.active-drop { background: {{ section.settings.accent_color }}; }
     .circle-{{ sid }} .circle-drop-cell.locked { background: #f4f3f0; }
@@ -1032,7 +954,6 @@
     .circle-{{ sid }} .circle-preview-savings { font-style: normal; font-size: 9px; color: {{ section.settings.accent_color }}; background: rgba(26,58,42,.07); padding: 2px 7px; border-radius: 4px; margin-top: 4px; display: inline-block; }
     .circle-{{ sid }} .circle-view-details-btn { display: inline-flex; align-items: center; gap: 5px; flex-shrink: 0; font-family: inherit; font-size: 9px; letter-spacing: .14em; text-transform: uppercase; color: {{ section.settings.muted_color }}; border: 0.5px solid {{ section.settings.border_color }}; background: none; border-radius: 999px; padding: 6px 12px; cursor: pointer; white-space: nowrap; transition: all .15s ease; }
     .circle-{{ sid }} .circle-view-details-btn:hover { color: {{ section.settings.accent_color }}; border-color: {{ section.settings.accent_color }}; }
-    .circle-{{ sid }} .circle-scarcity { text-align: center; font-size: 10px; letter-spacing: .06em; color: {{ section.settings.warning_color }}; margin-bottom: 12px; }
     .circle-{{ sid }} .circle-cta-btn { display: block; width: 100%; background: {{ section.settings.accent_color }}; color: #fff; border: none; border-radius: 99px; font-family: inherit; font-size: 11px; letter-spacing: .22em; text-transform: uppercase; padding: 18px 24px; cursor: pointer; margin-bottom: 12px; transition: background .18s, transform .1s; }
     .circle-{{ sid }} .circle-cta-btn:hover { background: #2d5c42; }
     .circle-{{ sid }} .circle-cta-btn:active { transform: scale(.99); }
@@ -1042,32 +963,14 @@
       justify-content: space-around;
       max-width: 70%;
       margin: 0 auto; }
-    /* ── PHASE PROGRESS CARD ── */
-    .circle-{{ sid }} .circle-reserve-card { }
-    .circle-{{ sid }} .circle-phase-header { display: flex; justify-content: space-between; gap: 16px; align-items: flex-start; margin-bottom: 10px; }
-    .circle-{{ sid }} .circle-phase-eye { font-size: 9px; letter-spacing: .2em; text-transform: uppercase; color: {{ section.settings.muted_color }}; margin-bottom: 4px; }
-    .circle-{{ sid }} .circle-phase-title { font-family: "Cormorant Garamond", serif; font-size: 24px; color: {{ section.settings.text_color }}; }
-    .circle-{{ sid }} .circle-badge { background: {{ section.settings.accent_color }}; color: #fff; font-family: "Cormorant Garamond", serif; font-size: 13px; font-weight: 600; padding: 7px 14px; border-radius: 999px; white-space: nowrap; }
-    .circle-{{ sid }} .circle-progress-row { display: flex; justify-content: space-between; font-size: 10px; color: {{ section.settings.muted_color }}; margin-bottom: 6px; }
-    .circle-{{ sid }} .circle-progress { height: 2px; background: {{ section.settings.border_color }}; border-radius: 99px; margin-bottom: 16px; overflow: hidden; }
-    .circle-{{ sid }} .circle-progress span { display: block; height: 100%; background: {{ section.settings.accent_color }}; }
-    .circle-{{ sid }} .circle-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-    .circle-{{ sid }} .circle-stats div { background: {{ section.settings.soft_color }}; border-radius: 8px; padding: 14px; text-align: center; }
-    .circle-{{ sid }} .circle-stats strong { display: block; font-family: "Cormorant Garamond", serif; font-size: 30px; line-height: 1; }
-    .circle-{{ sid }} .circle-stats span { display: block; font-size: 9px; letter-spacing: .18em; text-transform: uppercase; color: {{ section.settings.muted_color }}; margin-top: 5px; }
 
     /* ── LOCKED / NEXT DROP ROW ── */
     .circle-{{ sid }} .circle-locked-row { display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; padding: 20px 0; border-bottom: 0.5px solid {{ section.settings.border_color }}; margin-bottom: 28px; }
     .circle-{{ sid }} .circle-locked-eyebrow { font-size: 8px; letter-spacing: .2em; text-transform: uppercase; color: {{ section.settings.muted_color }}; margin-bottom: 5px; }
     .circle-{{ sid }} .circle-locked-title { font-family: "Cormorant Garamond", serif; font-size: 20px; font-weight: 300; color: {{ section.settings.muted_color }}; }
     .circle-{{ sid }} .circle-locked-right { display: flex; flex-direction: column; align-items: flex-end; gap: 10px; flex-shrink: 0; }
-    .circle-{{ sid }} .circle-locked-price { font-family: "Cormorant Garamond", serif; font-size: 20px; font-weight: 300; color: {{ section.settings.muted_color }}; white-space: nowrap; display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
-    .circle-{{ sid }} .circle-locked-badge { font-family: "DM Mono", monospace; font-size: 8px; letter-spacing: .14em; text-transform: uppercase; color: {{ section.settings.accent_color }}; background: rgba(26,58,42,.07); padding: 2px 7px; border-radius: 4px; font-weight: 400; }
-    .circle-{{ sid }} .circle-notify-inline { display: flex; gap: 8px; align-items: center; }
-    .circle-{{ sid }} .circle-notify-inline input { border: 0.5px solid {{ section.settings.border_color }}; background: {{ section.settings.soft_color }}; color: {{ section.settings.text_color }}; border-radius: 99px; padding: 8px 14px; font: inherit; font-size: 10px; width: 180px; outline: none; }
-    .circle-{{ sid }} .circle-notify-inline input:focus { border-color: {{ section.settings.accent_color }}; }
-    .circle-{{ sid }} .circle-notify-btn { font-size: 9px; letter-spacing: .14em; text-transform: uppercase; color: {{ section.settings.muted_color }}; background: none; border: 0.5px solid {{ section.settings.border_color }}; border-radius: 99px; padding: 8px 14px; font-family: inherit; cursor: pointer; white-space: nowrap; transition: all .15s; }
-    .circle-{{ sid }} .circle-notify-btn:hover { border-color: {{ section.settings.muted_color }}; color: {{ section.settings.text_color }}; }
+    .circle-{{ sid }} .circle-locked-price-wrapper { display: flex; align-items: center; gap: 8px; }
+    .circle-{{ sid }} .circle-locked-price-amount { font-family: "Cormorant Garamond", serif; font-size: 20px; font-weight: 600; color: {{ section.settings.accent_color }}; white-space: nowrap; }
 
     /* ── SHARED BUTTONS ── */
     .circle-{{ sid }} .circle-main-btn { display: block; width: 100%; border-radius: 999px; font-family: inherit; font-size: 11px; letter-spacing: .2em; text-transform: uppercase; padding: 16px; cursor: pointer; text-align: center; text-decoration: none; background: {{ section.settings.accent_color }}; color: #fff; border: 0; }
@@ -1076,20 +979,6 @@
     .circle-{{ sid }} .circle-waitlist-form input { width: 100%; border: 0.5px solid {{ section.settings.border_color }}; background: {{ section.settings.soft_color }}; color: {{ section.settings.text_color }}; border-radius: 999px; padding: 14px 16px; font: inherit; font-size: 11px; outline: none; }
     .circle-{{ sid }} .circle-waitlist-form input:focus { border-color: {{ section.settings.accent_color }}; }
     .circle-{{ sid }} .circle-already-subscribed { background: {{ section.settings.soft_color }}; border: 0.5px solid {{ section.settings.border_color }}; border-radius: 10px; padding: 16px; margin-top: 12px; font-size: 12px; line-height: 1.7; }
-
-    /* ── SOCIAL ── */
-    .circle-{{ sid }} .circle-social { margin-bottom: 18px; }
-    .circle-{{ sid }} .circle-social-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-    .circle-{{ sid }} .circle-social-card { background: {{ section.settings.card_color }}; border: 0.5px solid {{ section.settings.border_color }}; border-radius: 12px; padding: 14px; }
-    .circle-{{ sid }} .circle-social-top { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
-    .circle-{{ sid }} .circle-avatar { width: 40px; height: 40px; border-radius: 50%; background: {{ section.settings.image_bg_color }}; display: flex; align-items: center; justify-content: center; font-family: "Cormorant Garamond", serif; flex-shrink: 0; }
-    .circle-{{ sid }} .circle-social-name { font-size: 13px; }
-    .circle-{{ sid }} .circle-social-name span { color: #3b82f6; }
-    .circle-{{ sid }} .circle-handle { font-size: 10px; color: {{ section.settings.muted_color }}; }
-    .circle-{{ sid }} .circle-stars { display: flex; gap: 3px; margin-bottom: 7px; }
-    .circle-{{ sid }} .circle-stars i { width: 12px; height: 12px; border-radius: 2px; background: {{ section.settings.accent_color }}; }
-    .circle-{{ sid }} .circle-quote { font-family: "Cormorant Garamond", serif; font-style: italic; font-size: 14px; color: {{ section.settings.body_color }}; line-height: 1.45; }
-    .circle-{{ sid }} .circle-empty { font-size: 12px; color: {{ section.settings.muted_color }}; line-height: 1.7; }
 
     /* ══ MODALS ══ */
     .circle-{{ sid }} .circle-modal-overlay { position: fixed; inset: 0; background: rgba(14,14,13,.55); z-index: 9999; display: flex; align-items: flex-end; justify-content: center; padding: 0; backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); }
@@ -1126,18 +1015,10 @@
     .circle-{{ sid }} .circle-modal-was { font-family: "Cormorant Garamond", serif; font-size: 20px; font-weight: 300; color: {{ section.settings.muted_color }}; }
     .circle-{{ sid }} .circle-modal-save { font-style: normal; font-size: 9px; color: {{ section.settings.accent_color }}; background: rgba(26,58,42,.08); padding: 3px 8px; border-radius: 5px; }
     .circle-{{ sid }} .circle-modal-desc { font-size: 12px; line-height: 1.8; color: {{ section.settings.body_color }}; margin-bottom: 20px; }
-    .circle-{{ sid }} .circle-modal-link { display: inline-flex; align-items: center; gap: 6px; font-size: 9px; letter-spacing: .14em; text-transform: uppercase; color: {{ section.settings.muted_color }}; text-decoration: none; border-bottom: 0.5px solid {{ section.settings.border_color }}; padding-bottom: 1px; transition: all .15s; }
-    .circle-{{ sid }} .circle-modal-link:hover { color: {{ section.settings.accent_color }}; border-bottom-color: {{ section.settings.accent_color }}; }
-    .circle-{{ sid }} .circle-size-modal { }
-    .circle-{{ sid }} .circle-size-guide-content { font-size: 12px; line-height: 1.8; color: {{ section.settings.body_color }}; }
-    .circle-{{ sid }} .circle-size-guide-content table { width: 100%; border-collapse: collapse; margin: 12px 0; }
-    .circle-{{ sid }} .circle-size-guide-content th, .circle-{{ sid }} .circle-size-guide-content td { border: 0.5px solid {{ section.settings.border_color }}; padding: 10px 12px; font-size: 11px; text-align: left; }
-    .circle-{{ sid }} .circle-size-guide-content th { background: {{ section.settings.soft_color }}; font-size: 9px; letter-spacing: .12em; text-transform: uppercase; color: {{ section.settings.muted_color }}; }
 
     /* ── RESPONSIVE ── */
     @media (max-width: 480px) {
       .circle-{{ sid }} .circle-prod { flex: 0 0 calc(50% - 5px); width: calc(50% - 5px); }
-      .circle-{{ sid }} .circle-social-grid { grid-template-columns: 1fr; }
       .circle-{{ sid }} .circle-card, .circle-{{ sid }} .circle-login-card { padding: 18px; }
       .circle-{{ sid }} .circle-code-card { padding: 28px 18px; }
       .circle-{{ sid }} .circle-action-block { padding: 22px 20px 20px; }
@@ -1147,8 +1028,6 @@
       .circle-{{ sid }} .circle-drop-cell.active-drop .circle-drop-price { font-size: 26px; }
       .circle-{{ sid }} .circle-locked-row { flex-direction: column; gap: 14px; }
       .circle-{{ sid }} .circle-locked-right { align-items: flex-start; width: 100%; }
-      .circle-{{ sid }} .circle-notify-inline { width: 100%; }
-      .circle-{{ sid }} .circle-notify-inline input { flex: 1; width: auto; }
       .circle-{{ sid }} .circle-selected-preview { flex-wrap: wrap; }
     }
 </style>
@@ -1260,7 +1139,6 @@
     const enablePhase3 = {{ section.settings.enable_phase_3 | default: false | json }};
 
     const mainReserveBtn   = root.querySelector('[data-reserve-main]');
-    const scarcityText     = root.querySelector('[data-scarcity-text]');
     const optionsContainer = root.querySelector('[data-options-container]');
     const previewBox       = root.querySelector('[data-preview-box]');
     const previewImg       = root.querySelector('[data-preview-img]');
@@ -1277,16 +1155,6 @@
     const nextBtn          = root.querySelector('[data-arrow="next"]');
     const cards            = root.querySelectorAll('[data-product-index]');
     
-    // Get locked row elements
-    const lockedPriceAmount = root.querySelector('[data-locked-price-amount]');
-    const lockedBadge = root.querySelector('[data-locked-badge]');
-    
-    // Get strip price elements
-    const stripPrice1 = root.querySelector('[data-strip-price="1"]');
-    const stripPrice2 = root.querySelector('[data-strip-price="2"]');
-    const stripPrice3 = root.querySelector('[data-strip-price="3"]');
-    const publicPrice = root.querySelector('[data-strip-price="public"]');
-
     // Modals
     const productModal    = document.getElementById('circle-product-modal-' + sid);
     const productModalClose = document.getElementById('circle-modal-close-' + sid);
@@ -1433,38 +1301,8 @@ function updateAllPrices() {
         if (phaseDiscount > 0) {
           const discounted = Math.round(basePrice * (100 - phaseDiscount) / 100);
           priceEl.textContent = formatMoney(discounted);
-          
-          // Update corresponding badge
-          let badge = null;
-          if (priceEl.hasAttribute('data-locked-price-amount-2')) {
-            badge = lockedPriceContainer.querySelector('[data-locked-badge-2]');
-          } else if (priceEl.hasAttribute('data-locked-price-amount-3')) {
-            badge = lockedPriceContainer.querySelector('[data-locked-badge-3]');
-          } else if (priceEl.hasAttribute('data-locked-price-amount')) {
-            badge = lockedPriceContainer.querySelector('[data-locked-badge]');
-          }
-          
-          if (badge) {
-            badge.textContent = phaseDiscount + '% off';
-            badge.style.display = 'inline-block';
-          }
         } else if (phaseDiscount === 0) {
           priceEl.textContent = formatMoney(basePrice);
-          
-          // Update corresponding badge
-          let badge = null;
-          if (priceEl.hasAttribute('data-locked-price-amount-2')) {
-            badge = lockedPriceContainer.querySelector('[data-locked-badge-2]');
-          } else if (priceEl.hasAttribute('data-locked-price-amount-3')) {
-            badge = lockedPriceContainer.querySelector('[data-locked-badge-3]');
-          } else if (priceEl.hasAttribute('data-locked-price-amount')) {
-            badge = lockedPriceContainer.querySelector('[data-locked-badge]');
-          }
-          
-          if (badge) {
-            badge.textContent = 'Full price';
-            badge.style.display = 'inline-block';
-          }
         }
       }
     });
@@ -1490,24 +1328,14 @@ lockedRows.forEach(row => {
   if (priceEl && priceEl.textContent !== 'Closed') {
     const phaseDiscount = Number(priceEl.getAttribute('data-phase-discount') || 0);
     let discountedPriceValue = basePrice;
-    let badgeText = '';
     
     if (phaseDiscount > 0) {
       discountedPriceValue = Math.round(basePrice * (100 - phaseDiscount) / 100);
-      badgeText = phaseDiscount + '% off';
     } else if (phaseDiscount === 0) {
       discountedPriceValue = basePrice;
-      badgeText = 'Full price';
     }
     
     priceEl.textContent = formatMoney(discountedPriceValue);
-    
-    // Update corresponding badge in the same row
-    const badge = row.querySelector('[data-locked-badge-2], [data-locked-badge-3], [data-locked-badge]');
-    if (badge && badgeText) {
-      badge.textContent = badgeText;
-      badge.style.display = 'inline-block';
-    }
   }
 });
 }
@@ -1636,16 +1464,6 @@ lockedRows.forEach(row => {
           const src = selectedVariant.featured_image || (selectedProduct.images[0] && selectedProduct.images[0].src);
           if (src) cardImg.src = src;
         }
-      }
-
-      // Scarcity text
-      const qty = Number(selectedVariant.inventory_quantity || 0);
-      if (scarcityText) {
-        scarcityText.textContent = !selectedVariant.available
-          ? 'This variant is sold out.'
-          : (qty > 0 && qty <= 5)
-            ? `⚠ Only ${qty} unit${qty !== 1 ? 's' : ''} left in stock`
-            : 'Available now — members only.';
       }
 
       // Update preview box
@@ -1854,8 +1672,7 @@ document.addEventListener('DOMContentLoaded', function() {
     {
       "type": "text",
       "id": "access_codes",
-      "label": "Valid access codes (comma-separated)",
-      "info": "e.g. CIRCLE-A1B2, CIRCLE-C3D4. Leave blank to skip the code gate."
+      "label": "Valid access codes (comma-separated)"
     },
     { "type": "text", "id": "member_label", "label": "Member pill text", "default": "The Circle" },
     { "type": "text", "id": "signout_text", "label": "Sign out text", "default": "Sign out" },
@@ -1893,7 +1710,7 @@ document.addEventListener('DOMContentLoaded', function() {
       "type": "text",
       "id": "gate_error_text",
       "label": "Error text",
-      "default": "Invalid code. Please check your invitation email and try again."
+      "default": "Invalid code."
     },
     { "type": "header", "content": "Welcome" },
     { "type": "text", "id": "welcome_heading", "label": "Heading line 1", "default": "You're in" },
@@ -1902,57 +1719,43 @@ document.addEventListener('DOMContentLoaded', function() {
     { "type": "text", "id": "phase_1_start", "label": "Start date (YYYY-MM-DD)" },
     { "type": "text", "id": "phase_1_end", "label": "End date (YYYY-MM-DD)" },
     { "type": "range", "id": "phase_1_discount", "label": "Discount %", "min": 0, "max": 80, "step": 1, "default": 30 },
-    { "type": "text", "id": "phase_1_discount_code", "label": "Shopify discount code" },
+    { "type": "text", "id": "phase_1_discount_code", "label": "Discount code" },
     { "type": "text", "id": "phase_1_title", "label": "Title", "default": "Inner Circle Access" },
     { "type": "text", "id": "phase_1_label", "label": "Label (eyebrow)", "default": "Drop 1 — open now" },
-    { "type": "text", "id": "phase_1_short", "label": "Short label (phase strip)", "default": "Inner Circle" },
-    { "type": "text", "id": "phase_1_shipping_note1", "label": "Shipping note left side" },
-    { "type": "text", "id": "phase_1_shipping_note2", "label": "Shipping note right side" },
-
+    { "type": "text", "id": "phase_1_short", "label": "Short label", "default": "Inner Circle" },
+    { "type": "text", "id": "phase_1_shipping_note1", "label": "Shipping note left" },
+    { "type": "text", "id": "phase_1_shipping_note2", "label": "Shipping note right" },
     { "type": "header", "content": "Phase 2" },
     { "type": "text", "id": "phase_2_start", "label": "Start date (YYYY-MM-DD)" },
     { "type": "text", "id": "phase_2_end", "label": "End date (YYYY-MM-DD)" },
     { "type": "range", "id": "phase_2_discount", "label": "Discount %", "min": 0, "max": 80, "step": 1, "default": 20 },
-    { "type": "text", "id": "phase_2_discount_code", "label": "Shopify discount code" },
+    { "type": "text", "id": "phase_2_discount_code", "label": "Discount code" },
     { "type": "text", "id": "phase_2_title", "label": "Title", "default": "Second Release" },
     { "type": "text", "id": "phase_2_label", "label": "Label (eyebrow)", "default": "Drop 2 — open now" },
-    { "type": "text", "id": "phase_2_shipping_note1", "label": "Shipping note left side" },
-    { "type": "text", "id": "phase_2_shipping_note2", "label": "Shipping note right side" },
-    { "type": "header", "content": "Phase 3 (Optional)" },
+    { "type": "text", "id": "phase_2_shipping_note1", "label": "Shipping note left" },
+    { "type": "text", "id": "phase_2_shipping_note2", "label": "Shipping note right" },
+    { "type": "header", "content": "Phase 3" },
     { "type": "checkbox", "id": "enable_phase_3", "label": "Enable phase 3", "default": false },
     { "type": "text", "id": "phase_3_start", "label": "Start date (YYYY-MM-DD)" },
     { "type": "text", "id": "phase_3_end", "label": "End date (YYYY-MM-DD)" },
-    {
-      "type": "range",
-      "id": "phase_3_discount",
-      "label": "Discount % (0 = full price)",
-      "min": 0,
-      "max": 80,
-      "step": 1,
-      "default": 0
-    },
-    { "type": "text", "id": "phase_3_discount_code", "label": "Shopify discount code" },
+    { "type": "range", "id": "phase_3_discount", "label": "Discount %", "min": 0, "max": 80, "step": 1, "default": 0 },
+    { "type": "text", "id": "phase_3_discount_code", "label": "Discount code" },
     { "type": "text", "id": "phase_3_title", "label": "Title", "default": "Public Release" },
     { "type": "text", "id": "phase_3_label", "label": "Label (eyebrow)", "default": "Drop 3 — open now" },
-    { "type": "text", "id": "phase_3_short", "label": "Short label (phase strip)", "default": "Public" },
-    { "type": "text", "id": "phase_3_shipping_note1", "label": "Shipping note left side" },
-    { "type": "text", "id": "phase_3_shipping_note2", "label": "Shipping note right side" },
-    { "type": "header", "content": "Public Release Strip Cell" },
+    { "type": "text", "id": "phase_3_short", "label": "Short label", "default": "Public" },
+    { "type": "text", "id": "phase_3_shipping_note1", "label": "Shipping note left" },
+    { "type": "text", "id": "phase_3_shipping_note2", "label": "Shipping note right" },
+    { "type": "header", "content": "Public Release" },
     { "type": "text", "id": "public_release_eyebrow", "label": "Eyebrow", "default": "Public Release" },
     { "type": "text", "id": "public_release_label", "label": "Sub-label", "default": "No member benefits" },
     { "type": "text", "id": "public_release_tag", "label": "Tag text", "default": "Coming soon" },
     { "type": "header", "content": "Products" },
-    { "type": "collection", "id": "product_collection", "label": "Product collection" },
+    { "type": "collection", "id": "product_collection", "label": "Collection" },
     { "type": "range", "id": "product_limit", "label": "Max products", "min": 1, "max": 24, "step": 1, "default": 8 },
     { "type": "text", "id": "product_heading", "label": "Section heading", "default": "Choose your piece" },
-    { "type": "checkbox", "id": "hide_sold_out_products", "label": "Hide sold out products", "default": false },
+    { "type": "checkbox", "id": "hide_sold_out_products", "label": "Hide sold out", "default": false },
     { "type": "header", "content": "Reserve Button" },
-    {
-      "type": "text",
-      "id": "reserve_button_text",
-      "label": "Reserve button default text",
-      "default": "Reserve your piece"
-    },
+    { "type": "text", "id": "reserve_button_text", "label": "Button text", "default": "Reserve your piece" },
     {
       "type": "select",
       "id": "button_action",
@@ -1965,25 +1768,12 @@ document.addEventListener('DOMContentLoaded', function() {
     },
     { "type": "header", "content": "Size Guide" },
     { "type": "text", "id": "size_guide_title", "label": "Modal title", "default": "Size Guide" },
-    { "type": "textarea", "id": "size_guide_content", "label": "Size guide content (HTML / table supported)" },
-    { "type": "header", "content": "Ended / Waitlist" },
-    { "type": "text", "id": "ended_eyebrow", "label": "Ended eyebrow", "default": "All phases closed" },
-    { "type": "text", "id": "ended_heading", "label": "Ended heading", "default": "This offer has ended" },
-    { "type": "textarea", "id": "ended_text", "label": "Ended body text" },
-    {
-      "type": "text",
-      "id": "ended_button_text",
-      "label": "Ended button text",
-      "default": "Notify me for the next drop"
-    },
-    { "type": "text", "id": "notify_button_text", "label": "Notify button text", "default": "Notify me" },
-    {
-      "type": "text",
-      "id": "notify_placeholder",
-      "label": "Notify input placeholder",
-      "default": "Email for next drop"
-    },
-    { "type": "text", "id": "notify_note", "label": "Notify note" },
+    { "type": "textarea", "id": "size_guide_content", "label": "Content (HTML)" },
+    { "type": "header", "content": "Ended State" },
+    { "type": "text", "id": "ended_eyebrow", "label": "Eyebrow", "default": "All phases closed" },
+    { "type": "text", "id": "ended_heading", "label": "Heading", "default": "This offer has ended" },
+    { "type": "textarea", "id": "ended_text", "label": "Body text" },
+    { "type": "text", "id": "ended_button_text", "label": "Button text", "default": "Notify me" },
     { "type": "header", "content": "Colors" },
     { "type": "color", "id": "bg_color", "label": "Background", "default": "#f0efeb" },
     { "type": "color", "id": "card_color", "label": "Card background", "default": "#faf9f7" },
@@ -1991,11 +1781,10 @@ document.addEventListener('DOMContentLoaded', function() {
     { "type": "color", "id": "text_color", "label": "Text", "default": "#0e0e0d" },
     { "type": "color", "id": "body_color", "label": "Body text", "default": "#5a5855" },
     { "type": "color", "id": "muted_color", "label": "Muted text", "default": "#9a9792" },
-    { "type": "color", "id": "border_color", "label": "Border / divider", "default": "#e2dfd9" },
-    { "type": "color", "id": "accent_color", "label": "Accent (forest green)", "default": "#1a3a2a" },
-    { "type": "color", "id": "warning_color", "label": "Warning (scarcity)", "default": "#b8341b" },
-    { "type": "color", "id": "image_bg_color", "label": "Image placeholder bg", "default": "#e8e5e0" },
-    { "type": "color", "id": "gold_color", "label": "Gold / hint color", "default": "#9a7f4a" }
+    { "type": "color", "id": "border_color", "label": "Border", "default": "#e2dfd9" },
+    { "type": "color", "id": "accent_color", "label": "Accent", "default": "#1a3a2a" },
+    { "type": "color", "id": "warning_color", "label": "Warning", "default": "#b8341b" },
+    { "type": "color", "id": "image_bg_color", "label": "Image bg", "default": "#e8e5e0" }
   ],
   "presets": [{ "name": "Circle Member Offer" }]
 }
