@@ -36,6 +36,9 @@
   assign active_end_ts = 0
   assign active_shipping_note_1 = ''
   assign active_shipping_note_2 = ''
+  assign active_shipping_text = ''
+  assign active_tagline = ''
+  assign active_phase_name = ''
 
   if section.settings.offer_enabled
     if now_ts >= p1_start_ts and now_ts <= p1_end_ts
@@ -48,6 +51,9 @@
       assign active_end_ts = p1_end_ts
       assign active_shipping_note_1 = section.settings.phase_1_shipping_note1
       assign active_shipping_note_2 = section.settings.phase_1_shipping_note2
+      assign active_shipping_text = 'In your hands in ~14 days'
+      assign active_tagline = 'Yours before<br><em>the rest of the world.</em>'
+      assign active_phase_name = 'Drop 1'
     elsif now_ts >= p2_start_ts and now_ts <= p2_end_ts
       assign active_phase = 2
       assign active_discount = section.settings.phase_2_discount | plus: 0
@@ -58,6 +64,9 @@
       assign active_end_ts = p2_end_ts
       assign active_shipping_note_1 = section.settings.phase_2_shipping_note1
       assign active_shipping_note_2 = section.settings.phase_2_shipping_note2
+      assign active_shipping_text = 'In your hands in ~30 days'
+      assign active_tagline = 'Yours before<br><em>the rest of the world.</em>'
+      assign active_phase_name = 'Drop 2'
     elsif section.settings.enable_phase_3 and now_ts >= p3_start_ts and now_ts <= p3_end_ts
       assign active_phase = 3
       assign active_discount = section.settings.phase_3_discount | plus: 0
@@ -68,6 +77,9 @@
       assign active_end_ts = p3_end_ts
       assign active_shipping_note_1 = section.settings.phase_3_shipping_note1
       assign active_shipping_note_2 = section.settings.phase_3_shipping_note2
+      assign active_shipping_text = 'In your hands in ~60 days'
+      assign active_tagline = 'Available now<br><em>for everyone</em>'
+      assign active_phase_name = 'Public Release'
     endif
   endif
 
@@ -138,6 +150,9 @@
   data-phase-1-discount="{{ section.settings.phase_1_discount | plus: 0 }}"
   data-phase-2-discount="{{ section.settings.phase_2_discount | plus: 0 }}"
   data-phase-3-discount="{{ section.settings.phase_3_discount | plus: 0 }}"
+  data-phase-name="{{ active_phase_name }}"
+  data-shipping-text="{{ active_shipping_text }}"
+  data-tagline="{{ active_tagline | escape }}"
 >
   <!-- LOGGED IN: JS decides whether to show code gate or offer -->
   <div class="circle-shell">
@@ -1506,6 +1521,8 @@
     const discountCode = root.dataset.discountCode || '';
     const buttonAction = root.dataset.buttonAction || 'cart';
     const activePhase = Number(root.dataset.activePhase || '0');
+    const shippingText = root.dataset.shippingText || 'In your hands in ~14 days';
+    const tagline = root.dataset.tagline || 'Yours before<br><em>the rest of the world.</em>';
 
     const mainReserveBtn = root.querySelector('[data-reserve-main]');
     const scarcityText = root.querySelector('[data-scarcity-text]');
@@ -2011,15 +2028,6 @@
     });
 
     // ── Product details modal ──────────────────────────────────────────────
-    function getShippingText(phase) {
-      const shippingMap = {
-        1: 'In your hands in ~14 days',
-        2: 'In your hands in ~30 days',
-        3: 'In your hands in ~60 days'
-      };
-      return shippingMap[phase] || 'In your hands in ~14 days';
-    }
-
     function openProductModal(product, variant) {
       if (!productModal) return;
       const imgTrack = productModal.querySelector('[data-modal-img-track]');
@@ -2092,12 +2100,9 @@
       }
 
       if (modalTagline) {
-        modalTagline.innerHTML = discountPercent > 0
-          ? `Yours before<br><em>the rest of the world.</em>`
-          : `Available now<br><em>for Circle Members</em>`;
+        modalTagline.innerHTML = tagline;
       }
 
-      const shippingText = getShippingText(activePhase);
       if (modalShippingText) {
         modalShippingText.textContent = shippingText;
       }
