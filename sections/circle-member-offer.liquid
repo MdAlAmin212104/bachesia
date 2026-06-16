@@ -189,6 +189,13 @@
           <!-- Phase 1 - Always shown -->
           <div class="circle-drop-cell {% if active_phase == 1 %}active-drop{% else %}locked{% endif %}">
             <div class="circle-drop-num">Drop 1</div>
+            
+            {% if active_phase == 1 %}
+              <div class="circle-drop-ships">
+                Arrives Within ~14 days
+              </div>
+            {% endif %}
+
             <div
               class="circle-drop-price"
               data-strip-price="1"
@@ -216,17 +223,17 @@
                 {% endif %}
               </div>
             {% endunless %}
-            {% if active_phase == 1 %}
-              <div class="circle-drop-ships">
-                Ships in ~14 days
-              </div>
-            {% endif %}
           </div>
 
           <!-- Phase 2 - Show conditionally -->
           {% unless active_phase == 1 and section.settings.enable_phase_3 == false %}
             <div class="circle-drop-cell {% if active_phase == 2 %}active-drop{% elsif active_phase > 2 %}locked{% else %}locked{% endif %} phase-2">
               <div class="circle-drop-num">Drop 2</div>
+              
+              {% if active_phase == 2 %}
+                <div class="circle-drop-ships">Ships in ~30 days</div>
+              {% endif %}
+
               <div
                 class="circle-drop-price"
                 data-strip-price="2"
@@ -246,9 +253,6 @@
               <div class="circle-drop-tag">
                 {% if active_phase == 2 %}Open now{% elsif active_phase > 2 %}Closed{% else %}Locked{% endif %}
               </div>
-              {% if active_phase == 2 %}
-                <div class="circle-drop-ships">Ships in ~30 days</div>
-              {% endif %}
             </div>
           {% endunless %}
 
@@ -256,7 +260,22 @@
           {% if section.settings.enable_phase_3 %}
             <div class="circle-drop-cell {% if active_phase == 3 %}active-drop{% else %}locked{% endif %}">
               <div class="circle-drop-num">Public Release</div>
-              <div
+
+              {% if active_phase == 1 %}
+              <div class="circle-drop-ships_phase_3">
+                Arrives Within ~60 days
+              </div>
+            {% endif %}
+              
+              {% comment %} {% if active_phase == 2 %}
+                <div class="circle-drop-tag">
+                  {% if active_phase == 3 %}Open now{% else %}Drop 3{% endif %}
+                </div>
+              {% endif %} {% endcomment %}
+
+             
+              <div class="circle-drop-label">No member benefits</div>
+               <div
                 class="circle-drop-price"
                 data-strip-price="3"
                 data-phase-discount="{{ section.settings.phase_3_discount | plus: 0 }}"
@@ -271,17 +290,11 @@
                   {% if p3_d > 0 %}{{ p3_d }}% off{% else %}Full price{% endif %}
                 {% endif %}
               </div>
-              <div class="circle-drop-label">No member benefits</div>
-              {% unless active_phase == 2 %}
+              {% comment %} {% unless active_phase == 2 %}
                 <div class="circle-drop-tag">
                   {% if active_phase == 3 %}Open now{% else %}Locked{% endif %}
                 </div>
-              {% endunless %}
-              {% if active_phase == 2 %}
-                <div class="circle-drop-tag">
-                  {% if active_phase == 3 %}Open now{% else %}Drop 3{% endif %}
-                </div>
-              {% endif %}
+              {% endunless %} {% endcomment %}
             </div>
           {% else %}
             <div class="circle-drop-cell public-release">
@@ -474,8 +487,8 @@
                 <div class="circle-price-amount" data-preview-sale-price>—</div>
                 <span
                   class="inner_circle"
-                  style="font-size:16px;font-weight:300;color:var(--forest);letter-spacing:0.08em;"
-                  >(Inner Circle)</span
+                  style="font-size:12px;font-weight:300;color:var(--forest);letter-spacing:0.08em; margin-left: 10px;"
+                  >   (Inner Circle)</span
                 >
               </div>
             </div>
@@ -895,7 +908,7 @@
 
           .hero-sub {
             font-size: 12px;
-            color: var(--muted);
+            color: #16120b;
             letter-spacing: 0.03em;
             line-height: 1.85;
             max-width: 380px;
@@ -1031,14 +1044,25 @@
             .circle-{{ sid }} .circle-drop-cell.public-release .circle-drop-price { color: #555; font-size: 32px; }
             .circle-{{ sid }} .circle-drop-cell.public-release .circle-drop-label { color: #888; }
             .circle-{{ sid }} .circle-drop-cell.public-release .circle-drop-tag { background: #ddd; color: #999; }
-            .circle-{{ sid }} .circle-drop-ships { font-size: 9px; letter-spacing: .1em; text-transform: uppercase; color: rgba(255,255,255,.5); margin-top: 10px; }
-            .circle-{{ sid }} .circle-drop-num { font-size: 8px; letter-spacing: .24em; text-transform: uppercase; color: {{ section.settings.muted_color }}; margin-bottom: 8px; }
+            .circle-{{ sid }} .circle-drop-ships {     font-size: 20px;
+    letter-spacing: .1em;
+    color: white;
+    font-weight: bold; }
+    .circle-drop-ships_phase_3{
+      color: #141010;font-size: 20px;
+    letter-spacing: .1em;
+    font-weight: bold;
+    }
+            .circle-{{ sid }} .circle-drop-num { font-size: 11px; letter-spacing: .24em; text-transform: uppercase; color: {{ section.settings.muted_color }}; margin-bottom: 8px; }
             .circle-{{ sid }} .circle-drop-cell.active-drop .circle-drop-num { color: rgba(255,255,255,.45); }
-            .circle-{{ sid }} .circle-drop-cell.locked .circle-drop-num { color: #ccc; }
+            .circle-{{ sid }} .circle-drop-cell.locked .circle-drop-num { color: #999999; }
             .circle-{{ sid }} .circle-drop-price { font-family: "Cormorant Garamond", serif; font-size: 26px; font-weight: 600; line-height: 1; margin-bottom: 4px; color: {{ section.settings.text_color }}; }
-            .circle-{{ sid }} .circle-drop-cell.active-drop .circle-drop-price { color: #fff; font-size: 30px; }
-            .circle-{{ sid }} .circle-drop-cell.locked .circle-drop-price { color: {{ section.settings.muted_color }}; font-size: 20px; }
-            .circle-{{ sid }} .circle-drop-label { font-size: 8px; letter-spacing: .12em; text-transform: uppercase; color: {{ section.settings.muted_color }}; margin-bottom: 10px; }
+            .circle-{{ sid }} .circle-drop-cell.active-drop .circle-drop-price { color: rgba(255,255,255,.45);
+    font-size: 20px;
+    margin-top: 12px;
+}
+            .circle-{{ sid }} .circle-drop-cell.locked .circle-drop-price { color: #141010; font-size: 20px; }
+            .circle-{{ sid }} .circle-drop-label { font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: {{ section.settings.muted_color }}; margin-bottom: 10px; margin-top: 5px;}
             .circle-{{ sid }} .circle-drop-cell.active-drop .circle-drop-label { color: rgba(255,255,255,.55); }
             .circle-{{ sid }} .circle-drop-tag { display: inline-block; font-size: 8px; letter-spacing: .14em; text-transform: uppercase; padding: 3px 10px; border-radius: 99px; background: rgba(255,255,255,.14); color: rgba(255,255,255,.8); }
             .circle-{{ sid }} .circle-drop-cell:not(.active-drop) .circle-drop-tag { background: {{ section.settings.bg_color | default: '#f0efeb' }}; color: {{ section.settings.muted_color }}; }
@@ -1087,7 +1111,7 @@
             .circle-{{ sid }} .circle-prod.active .circle-prod-dot { background: {{ section.settings.accent_color }}; }
             .circle-{{ sid }} .circle-prod-icon { font-size: 28px; opacity: .25; }
             .circle-{{ sid }} .circle-prod-info { padding: 10px 10px 12px; }
-            .circle-{{ sid }} .circle-prod-name { font-family: "Cormorant Garamond", serif; font-size: 14px; color: {{ section.settings.text_color }}; margin-bottom: 3px; line-height: 1.2; }
+            .circle-{{ sid }} .circle-prod-name {font-size: 14px; color: {{ section.settings.text_color }}; margin-bottom: 3px; line-height: 1.2; }
             .circle-{{ sid }} .circle-prod-pricing { display: flex; gap: 6px; align-items: center; }
             .circle-{{ sid }} .circle-prod-pricing span { font-size: 12px; color: {{ section.settings.accent_color }}; }
             .circle-{{ sid }} .circle-prod-pricing s { font-size: 10px; color: {{ section.settings.muted_color }}; }
@@ -1147,7 +1171,7 @@
             .circle-{{ sid }} .circle-t-sep { font-size: 28px; color: {{ section.settings.border_color }}; padding: 8px 2px 0; line-height: 1; }
             .circle-{{ sid }} .circle-price-block { display: flex; align-items: flex-end; justify-content: space-between; padding: 20px 0; border-top: 0.5px solid {{ section.settings.border_color }}; border-bottom: 0.5px solid {{ section.settings.border_color }}; margin-bottom: 20px; }
             .circle-{{ sid }} .circle-price-context { font-size: 9px; letter-spacing: .16em; text-transform: uppercase; color: {{ section.settings.muted_color }}; margin-bottom: 4px; }
-            .circle-{{ sid }} .circle-price-amount { font-family: "Cormorant Garamond", serif; font-size: 48px; font-weight: 600; color: {{ section.settings.accent_color }}; line-height: 1; }
+            .circle-{{ sid }} .circle-price-amount { font-family: "Cormorant Garamond", serif; font-size: 40px; font-weight: 600; color: {{ section.settings.accent_color }}; line-height: 1; }
             .circle-{{ sid }} .circle-price-future { text-align: right; }
             .circle-{{ sid }} .circle-price-was { font-family: "Cormorant Garamond", serif; font-size: 32px; font-weight: 300; color: {{ section.settings.muted_color }}; display: block; line-height: 1; }
             .circle-{{ sid }} .circle-selected-preview { display: flex; align-items: center; gap: 14px; background: {{ section.settings.soft_color }}; border: 0.5px solid {{ section.settings.border_color }}; border-radius: 10px; padding: 12px; margin-bottom: 20px; }
@@ -1272,8 +1296,8 @@
               .circle-{{ sid }} .circle-price-amount { font-size: 38px; }
               .circle-{{ sid }} .circle-drop-price { font-size: 22px; }
               .circle-{{ sid }} .circle-drop-cell.active-drop .circle-drop-price { font-size: 26px; }
-              .circle-{{ sid }} .circle-locked-row { flex-direction: column; gap: 14px; }
-              .circle-{{ sid }} .circle-locked-right { align-items: flex-start; width: 100%; }
+              {% comment %} .circle-{{ sid }} .circle-locked-row { flex-direction: column; gap: 14px; } {% endcomment %}
+              {% comment %} .circle-{{ sid }} .circle-locked-right { align-items: flex-start; width: 100%; } {% endcomment %}
               .circle-{{ sid }} .circle-notify-inline { width: 100%; }
               .circle-{{ sid }} .circle-notify-inline input { flex: 1; width: auto; }
               .circle-{{ sid }} .circle-selected-preview { flex-wrap: wrap; }
@@ -1973,7 +1997,7 @@
         }, { passive: true });
       }
 
-      if (modalLabel) modalLabel.textContent = discountPercent > 0 ? `${discountPercent}% off for Circle members` : 'Circle Members Only';
+      if (modalLabel) modalLabel.textContent = discountPercent > 0 ? `EXCLUSIVELY FOR CIRCLE MEMBERS` : 'Circle Members Only';
       if (modalTitle) modalTitle.textContent = product.title;
       const currentPrice = variant ? discountedPrice(variant.price) : discountedPrice(product.price);
       const originalPrice = variant ? variant.price : product.price;

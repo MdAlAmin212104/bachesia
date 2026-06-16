@@ -32,7 +32,6 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 48px 24px;
   }
 
   .title {
@@ -83,10 +82,11 @@
   }
 
   .input-field {
-    font-size: 13px;
+    font-size: 11px;
     letter-spacing: .2em;
     text-transform: uppercase;
     margin-bottom: 32px;
+    color: black!important;
   }
 
   .waitlist-input {
@@ -97,12 +97,12 @@
 
   .input-field::placeholder,
   .waitlist-input::placeholder {
-    color: var(--faint);
+    color: #c4c1bc;
   }
 
   .input-field:focus,
   .waitlist-input:focus {
-    border-bottom-color: var(--forest);
+    border-bottom-color: black;
   }
 
   .cta-btn {
@@ -135,7 +135,7 @@
     font-size: 9px;
     letter-spacing: .32em;
     text-transform: uppercase;
-    color: var(--faint);
+    color: black;
     margin-bottom: 16px;
   }
 
@@ -144,7 +144,7 @@
     font-style: italic;
     font-size: 16px;
     font-weight: 300;
-    color: var(--faint);
+    color: #c4c1bc;
     line-height: 1.7;
     max-width: 320px;
     margin: 0 auto 28px;
@@ -231,6 +231,7 @@
     <div class="form-wrap">
       <input
         class="input-field"
+        style="color: black!important;"
         type="text"
         id="circle-code-input-{{ sid }}"
         placeholder="{{ gate_placeholder | default: 'Enter your private key' }}"
