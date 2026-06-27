@@ -75,24 +75,6 @@
         "slide_speed": "5000"
       }
     },
-    "rich_text_JajBVG": {
-      "type": "rich-text",
-      "name": "Rich text",
-      "settings": {
-        "title": "Last Remaining Pieces at Lower Prices",
-        "text": "<p><strong>Prices have dropped on the last remaining pieces of this collection.</strong> For a limited time until Christmas this is your exclusive opportunity to secure the pieces you've been watching at reduced prices.</p>",
-        "text_size_mobile": "text-base",
-        "text_size_desktop": "lg:text-2xl",
-        "font": "body",
-        "text_alignment": "text-left",
-        "cta_link": "",
-        "cta_text": "",
-        "cta_style": "link",
-        "desktop_width": "full",
-        "desktop_alignment": "left",
-        "color_scheme": "primary"
-      }
-    },
     "featured_collection_AWAeqQ": {
       "type": "featured-collection",
       "name": "Featured collection",
@@ -142,7 +124,6 @@
   },
   "order": [
     "slideshow_gfUzKQ",
-    "rich_text_JajBVG",
     "featured_collection_AWAeqQ",
     "main"
   ]

@@ -206,7 +206,7 @@
             <div class="circle-drop-num">Drop 1</div>
 
             {% if active_phase == 1 %}
-              <div class="circle-drop-ships">Arrives Within ~14 days</div>
+              <div class="circle-drop-ships">Arrives Within ~14 Days</div>
             {% endif %}
 
             <div
@@ -274,8 +274,8 @@
             <div class="circle-drop-cell {% if active_phase == 3 %}active-drop{% else %}locked{% endif %}">
               <div class="circle-drop-num">Public Release</div>
 
-              {% if active_phase == 1 %}
-                <div class="circle-drop-ships_phase_3">Arrives Within ~60 days</div>
+              {% if active_phase == 1 or active_phase == 2 %}
+                <div class="circle-drop-ships_phase_3">Arrives Within ~60 Days</div>
               {% endif %}
 
               <div class="circle-drop-label">No member benefits</div>
@@ -381,7 +381,7 @@
                       </div>
                       <div class="circle-prod-info">
                         <div class="circle-prod-name">{{ product.title }}</div>
-                        {% if product.available %}
+                        {% comment %} {% if product.available %}
                           <div class="circle-prod-pricing">
                             <span data-product-price-display>{{ sale_price | money }}</span>
                             {% if active_discount > 0 %}
@@ -390,9 +390,9 @@
                           </div>
                         {% else %}
                           <div class="circle-prod-status sold-label">Sold out</div>
-                        {% endif %}
+                        {% endif %} {% endcomment %}
                       </div>
-                      <button
+                      {% comment %} <button
                         type="button"
                         class="circle-prod-details-btn"
                         data-prod-details-btn
@@ -415,7 +415,42 @@
                           <path d="M11 8v6M8 11h6"></path>
                         </svg>
                         <span>View Product</span>
-                      </button>
+                      </button> {% endcomment %}
+                      {% comment %} <div class="prod-status"
+                        data-prod-details-btn
+                        data-product-id="{{ product.id }}"
+                        data-product-index="{{ loop_index }}"
+                        aria-label="View product details"
+                        style="color:var(--forest);">
+                        Tap to view →
+                      </div> {% endcomment %}
+                      <div class="prod-status-wrapper" data-product-index="{{ loop_index }}">
+  {% if product.available %}
+    <div class="prod-status status-active" 
+      data-prod-details-btn
+      data-product-id="{{ product.id }}"
+      data-product-index="{{ loop_index }}"
+      aria-label="View product details"
+      style="color:var(--forest);cursor:pointer;display:none;">
+      Tap to view →
+    </div>
+    <div class="prod-status status-shipping" style="color:#9a9792;font-size:8px;letter-spacing:0.08em;text-transform:uppercase;">
+      {% if active_phase == 1 %}
+        Ships in ~14 days
+      {% elsif active_phase == 2 %}
+        Ships in ~30 days
+      {% elsif active_phase == 3 %}
+        Ships in ~60 days
+      {% else %}
+        Available now
+      {% endif %}
+    </div>
+  {% else %}
+    <div class="prod-status" style="color:#9a9792;font-size:8px;letter-spacing:0.08em;text-transform:uppercase;">
+      Sold out
+    </div>
+  {% endif %}
+</div>
                     </div>
                     {% assign loop_index = loop_index | plus: 1 %}
                   {% endfor %}
@@ -480,11 +515,11 @@
           <div class="circle-price-block">
             <div class="circle-price-main">
               <div class="circle-price-context">Your price today</div>
-              <div style="display: flex; align-items: end;">
+              <div style="display: flex;">
                 <div class="circle-price-amount" data-preview-sale-price>—</div>
                 <span
                   class="inner_circle"
-                  style="font-size:16px;font-weight:300;color:var(--forest);letter-spacing:0.08em; margin-left: 10px;"
+                  style="font-size:18px;font-weight:300;color:#1a3a2a;  margin-left: 10px; font-family: Cormorant Garamond";
                 >
                   (Inner Circle)</span
                 >
@@ -534,7 +569,7 @@
                 <div class="circle-locked-price-wrapper">
                   <span class="circle-locked-price-amount" data-locked-price-3 data-phase-discount="{{ p3_d }}">—</span>
                 </div>
-                <div class="locked-when" data-locked-when-3>Ships in ~40–50 days</div>
+                <div class="locked-when" data-locked-when-3>Ships in ~50–60 days</div>
               </div>
             </div>
           {% endif %}
@@ -628,7 +663,7 @@
   >
     <div class="circle-modal">
       <button type="button" class="circle-modal-close" id="circle-modal-close-{{ sid }}" aria-label="Close">
-        <svg
+        {% comment %} <svg
           viewBox="0 0 24 24"
           width="18"
           height="18"
@@ -639,7 +674,8 @@
           stroke-linejoin="round"
         >
           <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
-        </svg>
+        </svg> {% endcomment %}
+        ✕
       </button>
 
       <!-- Image slider -->
@@ -723,7 +759,7 @@
   </div>
 
   <!-- ═══ SIZE GUIDE MODAL ═══ -->
-  <div
+  {% comment %} <div
     class="circle-modal-overlay"
     id="circle-size-modal-{{ sid }}"
     style="display:none;"
@@ -755,6 +791,87 @@
         </div>
       </div>
     </div>
+  </div> {% endcomment %}
+    <!-- ═══ SIZE GUIDE MODAL ═══ -->
+  <div
+    class="circle-modal-overlay circle-size-modal-overlay"
+    id="circle-size-modal-{{ sid }}"
+    style="display:none;"
+    role="dialog"
+    aria-modal="true"
+    aria-label="Size guide"
+  >
+    <div class="circle-modal circle-size-modal" style="max-height:85vh;overflow-y:auto;">
+      
+      <div style="padding:24px 24px 0;display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+        <div>
+          <div style="font-size:9px;letter-spacing:0.24em;text-transform:uppercase;color:var(--muted);margin-bottom:4px;">Jaffary</div>
+          <div style="font-family:var(--serif);font-size:22px;font-weight:400;color:var(--ink);" id="size-guide-title-{{ sid }}">Size Guide aaaa</div>
+        </div>
+        <button type="button" class="circle-modal-close" id="circle-size-close-{{ sid }}" aria-label="Close" style="position:static;width:32px;height:32px;border-radius:50%;background:var(--bg);border:0.5px solid var(--stone);cursor:pointer;font-size:16px;color:var(--muted);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+          ✕
+        </button>
+      </div>
+
+      <!-- UNIT TOGGLE -->
+      <div style="padding:16px 24px 20px;">
+        <div class="unit-toggle">
+          <button id="size-btn-cm-{{ sid }}" class="active" onclick="setSizeUnit('{{ sid }}', 'cm')">cm</button>
+          <button id="size-btn-in-{{ sid }}" class="inactive" onclick="setSizeUnit('{{ sid }}', 'in')">inches</button>
+        </div>
+      </div>
+
+      <!-- SIZE TABLE -->
+      <div style="padding:0 24px 32px;overflow-x:auto;">
+        <table class="size-guide-table">
+          <thead>
+            <tr>
+              <th></th>
+              <th>30</th>
+              <th>32</th>
+              <th>34</th>
+              <th>36</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Waist</td>
+              <td class="sz-cell-{{ sid }}" data-cm="81">81</td>
+              <td class="sz-cell-{{ sid }}" data-cm="85.73">85.73</td>
+              <td class="sz-cell-{{ sid }}" data-cm="90.81">90.81</td>
+              <td class="sz-cell-{{ sid }}" data-cm="95.89">95.89</td>
+            </tr>
+            <tr>
+              <td style="
+    background: #0e0e0d;
+    color: rgba(255,255,255,1);
+    padding: 13px 16px;
+    font-size: 9px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    font-weight: 400;
+    white-space: nowrap;
+    width: 90px;">Hips</td>
+              <td class="sz-cell-{{ sid }}" data-cm="101">101</td>
+              <td class="sz-cell-{{ sid }}" data-cm="105.14">105.14</td>
+              <td class="sz-cell-{{ sid }}" data-cm="109.22">109.22</td>
+              <td class="sz-cell-{{ sid }}" data-cm="114.30">114.30</td>
+            </tr>
+            <tr>
+              <td>Length</td>
+              <td class="sz-cell-{{ sid }}" data-cm="110">110</td>
+              <td class="sz-cell-{{ sid }}" data-cm="111">111</td>
+              <td class="sz-cell-{{ sid }}" data-cm="112">112</td>
+              <td class="sz-cell-{{ sid }}" data-cm="113">113</td>
+            </tr>
+          </tbody>
+        </table>
+        <p style="font-size:9px;color:var(--faint);letter-spacing:0.06em;line-height:1.8;margin-top:16px;">
+          All measurements in <span id="size-unit-label-{{ sid }}">centimetres (cm)</span>. Measure your body, not the garment.
+        </p>
+      </div>
+
+    </div>
   </div>
 
   {% if offer_active and offer_collection != blank %}
@@ -772,7 +889,7 @@
             "available": {{ product.available | json }},
             "price": {{ product.price_min | json }},
             "compare_at_price": {{ product.compare_at_price_max | default: product.price_min | json }},
-            "description": {{ product.description | strip_html | truncate: 320 | json }},
+            "description": {{ product.description | strip_html | json }},
             "options": {{ product.options | json }},
             "images": [
               {% assign printed_img_first = false %}
@@ -807,6 +924,18 @@
 </section>
 
 <style>
+
+  .circle-{{ sid }} .circle-prod.active > .prod-status{
+    opacity: 1;
+  }
+
+  .prod-status {
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #1a3a2a;
+    margin-bottom: 10px;
+  }
             /* ── PRODUCT DETAILS BUTTON ── */
           .circle-{{ sid }} .circle-prod {
             position: relative;
@@ -911,7 +1040,7 @@
     }
 
             .hero-sub {
-              font-size: 14px;
+              font-size: 13px;
               color: #16120b;
               letter-spacing: 0.03em;
               line-height: 1.85;
@@ -995,6 +1124,8 @@
           -webkit-box-orient: vertical;
           overflow: hidden;
           text-overflow: ellipsis;
+          font-family: "Cormorant Garamond", serif; 
+          color: #0e0e0d;
         }
 
             /* ── BASE ── */
@@ -1045,25 +1176,23 @@
               .circle-{{ sid }} .circle-drop-cell.public-release .circle-drop-price { color: #555; font-size: 32px; }
               .circle-{{ sid }} .circle-drop-cell.public-release .circle-drop-label { color: #888; }
               .circle-{{ sid }} .circle-drop-cell.public-release .circle-drop-tag { background: #ddd; color: #999; }
-              .circle-{{ sid }} .circle-drop-ships {     font-size: 18px;
-      letter-spacing: .1em;
-      color: #fff;
-      font-weight: bold; }
-      .circle-drop-ships_phase_3{
-        color: #0e0e0d;
-        font-size: 18px;
-      letter-spacing: .1em;
-      font-weight: bold;
-      }
+              .circle-{{ sid }} .circle-drop-ships {
+                color: #fff;
+                font-family: "Cormorant Garamond", serif; 
+                font-size: 16px;
+                font-weight: bold;}
+                .circle-drop-ships_phase_3{
+                  color: #0e0e0d;
+                  font-family: "Cormorant Garamond", serif; 
+                font-size: 16px;
+                font-weight: bold;
+                }
               .circle-{{ sid }} .circle-drop-num { font-size: 8px; letter-spacing: .24em; text-transform: uppercase; color: {{ section.settings.muted_color }}; margin-bottom: 8px; }
               .circle-{{ sid }} .circle-drop-cell.active-drop .circle-drop-num { color: rgba(255,255,255,.45); }
               .circle-{{ sid }} .circle-drop-cell.locked .circle-drop-num { color: #9a9792; }
-              .circle-{{ sid }} .circle-drop-price { font-family: "Cormorant Garamond", serif!important; font-size: 26px; font-weight: 600; line-height: 1; margin-bottom: 4px; color: {{ section.settings.text_color }}; }
-              .circle-{{ sid }} .circle-drop-cell.active-drop .circle-drop-price { color: rgba(255,255,255,.45);
-      font-size: 20px;
-      margin-top: 12px;
-  }
-              .circle-{{ sid }} .circle-drop-cell.locked .circle-drop-price { color: #141010; font-size: 22px; }
+              .circle-{{ sid }} .circle-drop-price { font-family: "Cormorant Garamond", serif!important; font-size: 22px; font-weight: 600; line-height: 1; margin-bottom: 4px; color: {{ section.settings.text_color }}; }
+              .circle-{{ sid }} .circle-drop-cell.active-drop .circle-drop-price { color: rgba(255,255,255,0.7); margin-top: 12px; }
+              .circle-{{ sid }} .circle-drop-cell.locked .circle-drop-price { color: #141010; }
               .circle-{{ sid }} .circle-drop-label { font-size: 9px; letter-spacing: .12em; text-transform: uppercase; color: #9a9792; margin-bottom: 10px; margin-top: 5px;}
               .circle-{{ sid }} .circle-drop-cell.active-drop .circle-drop-label { color: rgba(255,255,255,.55); }
               .circle-{{ sid }} .circle-drop-tag { display: inline-block; font-size: 8px; letter-spacing: .14em; text-transform: uppercase; padding: 3px 10px; border-radius: 99px; background: rgba(255,255,255,.14); color: rgba(255,255,255,.8); }
@@ -1106,15 +1235,14 @@
               .circle-{{ sid }} .circle-prod:hover:not(.sold) { border-color: {{ section.settings.border_color }}; }
               .circle-{{ sid }} .circle-prod.active { border-color: {{ section.settings.accent_color }}; background: #fff; box-shadow: 0 2px 16px rgba(26,58,42,.08); }
               .circle-{{ sid }} .circle-prod.sold { opacity: .38; cursor: default; }
-              .circle-{{ sid }} .circle-prod-img { width: 100%; aspect-ratio: 1 / 1; background: {{ section.settings.image_bg_color }}; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
+              .circle-{{ sid }} .circle-prod-img { width: 100%; aspect-ratio: 1 / 1; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
               .circle-{{ sid }} .circle-prod-img img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .3s ease; }
               .circle-{{ sid }} .circle-prod:hover:not(.sold) .circle-prod-img img { transform: scale(1.03); }
               .circle-{{ sid }} .circle-prod-dot { position: absolute; top: 8px; right: 8px; z-index: 2; width: 6px; height: 6px; border-radius: 50%; background: {{ section.settings.border_color }}; transition: background .15s; }
               .circle-{{ sid }} .circle-prod.active .circle-prod-dot { background: {{ section.settings.accent_color }}; }
               .circle-{{ sid }} .circle-prod-icon { font-size: 28px; opacity: .25; }
-              .circle-{{ sid }} .circle-prod-info { padding: 10px 10px 12px; }
-              .circle-{{ sid }} .circle-prod-name {font-size: 14px; color: {{ section.settings.text_color }}; margin-bottom: 3px; line-height: 1.2; }
-              .circle-{{ sid }} .circle-prod-pricing { display: flex; gap: 6px; align-items: center; }
+              .circle-{{ sid }} .circle-prod-info { padding: 10px 0 10px 10px; }
+                            .circle-{{ sid }} .circle-prod-pricing { display: flex; gap: 6px; align-items: center; }
               .circle-{{ sid }} .circle-prod-pricing span { font-size: 12px; color: {{ section.settings.accent_color }}; }
               .circle-{{ sid }} .circle-prod-pricing s { font-size: 10px; color: {{ section.settings.muted_color }}; }
               .circle-{{ sid }} .circle-prod-status { font-size: 8px; letter-spacing: .1em; text-transform: uppercase; color: {{ section.settings.muted_color }}; margin-top: 3px; }
@@ -1172,12 +1300,12 @@
               .circle-{{ sid }} .circle-t-lbl { font-size: 8px; letter-spacing: .2em; text-transform: uppercase; color: {{ section.settings.muted_color }}; display: block; margin-top: 5px; }
               .circle-{{ sid }} .circle-t-sep { font-size: 28px; color: {{ section.settings.border_color }}; padding: 8px 2px 0; line-height: 1; }
               .circle-{{ sid }} .circle-price-block { display: flex; align-items: flex-end; justify-content: space-between; padding: 20px 0; border-top: 0.5px solid {{ section.settings.border_color }}; border-bottom: 0.5px solid {{ section.settings.border_color }}; margin-bottom: 20px; }
-              .circle-{{ sid }} .circle-price-context { font-size: 9px; letter-spacing: .16em; text-transform: uppercase; color: {{ section.settings.muted_color }}; margin-bottom: 4px; }
+              .circle-{{ sid }} .circle-price-context { font-size: 9px; letter-spacing: .16em; text-transform: uppercase; color: {{ section.settings.muted_color }}; }
               .circle-{{ sid }} .circle-price-amount { font-family: "Cormorant Garamond", serif; font-size: 48px; font-weight: 600; color: {{ section.settings.accent_color }}; line-height: 1; }
               .circle-{{ sid }} .circle-price-future { text-align: right; }
               .circle-{{ sid }} .circle-price-was { font-family: "Cormorant Garamond", serif; font-size: 32px; font-weight: 300; color: {{ section.settings.muted_color }}; display: block; line-height: 1; }
               .circle-{{ sid }} .circle-selected-preview { display: flex; align-items: center; gap: 14px; background: {{ section.settings.soft_color }}; border: 0.5px solid {{ section.settings.border_color }}; border-radius: 10px; padding: 12px; margin-bottom: 20px; }
-              .circle-{{ sid }} .circle-preview-image { width: 56px; height: 56px; border-radius: 6px; background: {{ section.settings.image_bg_color }}; overflow: hidden; flex-shrink: 0; }
+              .circle-{{ sid }} .circle-preview-image { width: 56px; height: 56px; border-radius: 6px; overflow: hidden; flex-shrink: 0; }
               .circle-{{ sid }} .circle-preview-image img { width: 100%; height: 100%; object-fit: cover; }
               .circle-{{ sid }} .circle-preview-details { flex-grow: 1; overflow: hidden; }
               .circle-{{ sid }} .circle-preview-title { font-family: "Cormorant Garamond", serif; font-size: 16px; color: {{ section.settings.text_color }}; margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -1235,7 +1363,7 @@
               .circle-{{ sid }} .circle-social-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
               .circle-{{ sid }} .circle-social-card { background: {{ section.settings.card_color }}; border: 0.5px solid {{ section.settings.border_color }}; border-radius: 12px; padding: 14px; }
               .circle-{{ sid }} .circle-social-top { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
-              .circle-{{ sid }} .circle-avatar { width: 40px; height: 40px; border-radius: 50%; background: {{ section.settings.image_bg_color }}; display: flex; align-items: center; justify-content: center; font-family: "Cormorant Garamond", serif; flex-shrink: 0; }
+              .circle-{{ sid }} .circle-avatar { width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: "Cormorant Garamond", serif; flex-shrink: 0; }
               .circle-{{ sid }} .circle-social-name { font-size: 13px; }
               .circle-{{ sid }} .circle-social-name span { color: #3b82f6; }
               .circle-{{ sid }} .circle-handle { font-size: 10px; color: {{ section.settings.muted_color }}; }
@@ -1246,22 +1374,50 @@
 
               /* ══ MODALS ══ */
               .circle-{{ sid }} .circle-modal-overlay { position: fixed; inset: 0; background: rgba(14,14,13,.55); z-index: 9999; display: flex; align-items: flex-end; justify-content: center; padding: 0; backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); }
-              @media (min-width: 600px) {
-                .circle-{{ sid }} .circle-modal-overlay { align-items: center; padding: 24px; }
-              }
+              
               .circle-{{ sid }} .circle-modal { position: relative; background: {{ section.settings.card_color | default: '#faf9f7' }}; width: 100%; max-width: 600px; max-height: 92vh; overflow-y: auto; border-radius: 20px 20px 0 0; animation: circleModalIn-{{ sid }} .28s cubic-bezier(.25,1,.5,1); }
               @media (min-width: 600px) {
-                .circle-{{ sid }} .circle-modal { border-radius: 16px; max-height: 88vh; }
+                .circle-{{ sid }} .circle-modal {border-radius: 16px 16px 0 0; max-height: 88vh; }
               }
               @keyframes circleModalIn-{{ sid }} { from { transform: translateY(40px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-              .circle-{{ sid }} .circle-modal-close { position: absolute; top: 16px; right: 16px; z-index: 10; width: 32px; height: 32px; border-radius: 50%; border: 0.5px solid {{ section.settings.border_color }}; background: {{ section.settings.soft_color | default: '#f0efeb' }}; color: {{ section.settings.muted_color }}; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all .15s; }
-              .circle-{{ sid }} .circle-modal-close:hover { background: {{ section.settings.border_color }}; color: {{ section.settings.text_color }}; }
-              .circle-{{ sid }} .circle-modal-gallery { position: relative; width: 100%; aspect-ratio: 1 / 1; background: {{ section.settings.image_bg_color }}; overflow: hidden; border-radius: 20px 20px 0 0; }
+              {% comment %} .circle-{{ sid }} .circle-modal-close { position: absolute; top: 16px; right: 16px; z-index: 10; width: 32px; height: 32px; border-radius: 50%; border: 0.5px solid {{ section.settings.border_color }}; background: {{ section.settings.soft_color | default: '#f0efeb' }}; color: {{ section.settings.muted_color }}; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all .15s; } {% endcomment %}
+               .circle-{{ sid }} .circle-modal-close {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.9);
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    color: var(--ink);
+    line-height: 1;
+    z-index: 10;
+}
+              {% comment %} .circle-{{ sid }} .circle-modal-close:hover { background: {{ section.settings.border_color }}; color: {{ section.settings.text_color }}; } {% endcomment %}
+              .circle-{{ sid }} .circle-modal-gallery { position: relative; width: 100%; aspect-ratio: 1 / 1; overflow: hidden; border-radius: 20px 20px 0 0; }
               @media (min-width: 600px) {
                 .circle-{{ sid }} .circle-modal-gallery { border-radius: 16px 16px 0 0; }
+                
+              }
+              @media (min-width: 500px) {
+                span.inner_circle {
+                    display: flex;
+                    align-items: end;
+                }
+              }
+              @media (max-width: 500px) {
+                span.inner_circle {
+                  display: none;
+                }
               }
               .circle-{{ sid }} .circle-modal-img-track { display: flex; height: 100%; transition: transform .35s cubic-bezier(.25,1,.5,1); }
-              .circle-{{ sid }} .circle-modal-img-track img { flex: 0 0 100%; width: 100%; height: 100%; object-fit: cover; display: block; }
+              .circle-{{ sid }} .circle-modal-img-track img { flex: 0 0 100%; width: 100%; height: 100%; object-fit: contain; display: block; }
               .circle-{{ sid }} .circle-modal-img-prev,
               .circle-{{ sid }} .circle-modal-img-next { position: absolute; top: 50%; transform: translateY(-50%); width: 36px; height: 36px; border-radius: 50%; border: 0.5px solid rgba(255,255,255,.3); background: rgba(255,255,255,.85); color: {{ section.settings.text_color }}; cursor: pointer; display: flex; align-items: center; justify-content: center; z-index: 3; transition: all .15s; }
               .circle-{{ sid }} .circle-modal-img-prev { left: 12px; }
@@ -1390,7 +1546,6 @@
                 .circle-{{ sid }} .circle-action-block { padding: 22px 20px 20px; }
                 .circle-{{ sid }} .circle-t-num { min-width: 40px; font-size: 36px; }
                 .circle-{{ sid }} .circle-price-amount { font-size: 38px; }
-                .circle-{{ sid }} .circle-drop-price { font-size: 22px; }
                 .circle-{{ sid }} .circle-drop-cell.active-drop .circle-drop-price { font-size: 26px; }
                 .circle-{{ sid }} .circle-notify-inline { width: 100%; }
                 .circle-{{ sid }} .circle-notify-inline input { flex: 1; width: auto; }
@@ -1400,6 +1555,174 @@
                 .modal-tagline { font-size: 22px; }
                 .modal-shipping-text { font-size: 22px; }
               }
+
+
+
+              /* ── MODAL DESCRIPTION FULL ── */
+.circle-{{ sid }} .circle-modal-desc {
+  font-size: 13px;
+  line-height: 1.8;
+  color: var(--muted);
+  margin-bottom: 20px;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  max-height: 300px;
+  overflow-y: auto;
+  padding-right: 5px;
+}
+
+.circle-{{ sid }} .circle-modal-desc::-webkit-scrollbar {
+  width: 3px;
+}
+
+.circle-{{ sid }} .circle-modal-desc::-webkit-scrollbar-track {
+  background: var(--stone);
+  border-radius: 10px;
+}
+
+.circle-{{ sid }} .circle-modal-desc::-webkit-scrollbar-thumb {
+  background: var(--forest);
+  border-radius: 10px;
+}
+
+/* ── SIZE GUIDE MODAL ── */
+.circle-{{ sid }} .circle-size-modal .modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(14,14,13,0.55);
+  z-index: 10000;
+  align-items: flex-end;
+  justify-content: center;
+  backdrop-filter: blur(2px);
+}
+.circle-{{ sid }} .circle-size-modal .modal-overlay.open { display: flex; }
+
+.circle-{{ sid }} .circle-size-modal .modal {
+  background: var(--card);
+  width: 100%;
+  max-width: 580px;
+  border-radius: 20px 20px 0 0;
+  overflow: hidden;
+  max-height: 92vh;
+  overflow-y: auto;
+  animation: slideUp 0.28s cubic-bezier(0.4,0,0.2,1);
+}
+@keyframes slideUp { from { transform: translateY(40px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+.circle-{{ sid }} .circle-size-modal .size-guide-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--mono);
+  font-size: 11px;
+  table-layout: fixed;
+}
+
+.circle-{{ sid }} .circle-size-modal .size-guide-table th {
+  background: var(--ink);
+  color: #fff;
+  padding: 12px 16px;
+  text-align: center;
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  font-weight: 400;
+}
+.circle-{{ sid }} .circle-size-modal .size-guide-table th:first-child {
+  text-align: left;
+  border-radius: 8px 0 0 0;
+}
+.circle-{{ sid }} .circle-size-modal .size-guide-table th:last-child {
+  border-radius: 0 8px 0 0;
+}
+
+.circle-{{ sid }} .circle-size-modal .size-guide-table td {
+  padding: 13px 16px;
+  text-align: center;
+  color: var(--ink);
+}
+.circle-{{ sid }} .circle-size-modal .size-guide-table td:first-child {
+  background: var(--ink);
+  color: rgba(255,255,255,1);
+  text-align: left;
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-weight: 400;
+  white-space: nowrap;
+  width: 90px;
+}
+.circle-{{ sid }} .circle-size-modal .size-guide-table tr:nth-child(2) td {
+  background: #f4f3f0;
+}
+.circle-{{ sid }} .circle-size-modal .size-guide-table tr:nth-child(4) td:first-child {
+  border-radius: 0 0 0 8px;
+}
+.circle-{{ sid }} .circle-size-modal .size-guide-table tr:nth-child(4) td:last-child {
+  border-radius: 0 0 8px 0;
+}
+
+.circle-{{ sid }} .circle-size-modal .unit-toggle {
+  display: inline-flex;
+  background: var(--bg);
+  border: 0.5px solid var(--stone);
+  border-radius: 99px;
+  padding: 3px;
+}
+.circle-{{ sid }} .circle-size-modal .unit-toggle button {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  padding: 7px 20px;
+  border-radius: 99px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.circle-{{ sid }} .circle-size-modal .unit-toggle .active {
+  background: var(--forest);
+  color: #fff;
+}
+.circle-{{ sid }} .circle-size-modal .unit-toggle .inactive {
+  background: transparent;
+  color: var(--muted);
+}
+
+/* ── PRODUCT STATUS TOGGLE ── */
+.circle-{{ sid }} .prod-status-wrapper {
+  padding: 0 0 8px 10px;
+}
+
+.circle-{{ sid }} .prod-status {
+  font-size: 8px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.circle-{{ sid }} .prod-status.status-active {
+  color: var(--forest);
+  cursor: pointer;
+}
+
+.circle-{{ sid }} .prod-status.status-shipping {
+  color: #9a9792;
+}
+
+.circle-{{ sid }} .circle-prod.active .prod-status.status-active {
+  display: block !important;
+}
+
+.circle-{{ sid }} .circle-prod.active .prod-status.status-shipping {
+  display: none !important;
+}
+
+.circle-{{ sid }} .circle-prod:not(.active) .prod-status.status-active {
+  display: none !important;
+}
+
+.circle-{{ sid }} .circle-prod:not(.active) .prod-status.status-shipping {
+  display: block !important;
+}
 </style>
 
 <script>
@@ -1564,8 +1887,11 @@
       const dec = String(value % 100).padStart(2, '0');
       const withComma = s => String(s).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
       
+      // Check if amount is a whole number (no decimal)
+      const isWholeNumber = dec === '00';
+      
       let formattedAmount;
-      if (moneyFormat && (moneyFormat.includes('amount_no_decimals') || dec === '00')) {
+      if (moneyFormat && (moneyFormat.includes('amount_no_decimals') || isWholeNumber)) {
         formattedAmount = withComma(whole);
       } else {
         formattedAmount = withComma(whole) + '.' + dec;
@@ -1578,6 +1904,11 @@
         .replace(/\{\{\s*amount_no_decimals\s*\}\}/g, withComma(whole))
         .replace(/\{\{\s*amount_with_apostrophe_separator\s*\}\}/g, withComma(whole).replace(/,/g, "'") + '.' + dec)
         .replace(/\{\{\s*amount\s*\}\}/g, formattedAmount);
+      
+      // Remove .00 from the final result
+      if (isWholeNumber) {
+        result = result.replace(/\.00/g, '');
+      }
       
       return result;
     }
@@ -1696,6 +2027,79 @@
       }
     });
 
+        // ── Update size guide title with product name ──────────────────────
+    function updateSizeGuideTitle(productName) {
+      const titleEl = document.getElementById('size-guide-title-' + sid);
+      if (titleEl && productName) {
+        titleEl.textContent = productName + ' — Size Guide';
+      } else if (titleEl) {
+        titleEl.textContent = '{{ section.settings.size_guide_title | default: 'Size Guide' }}';
+      }
+    }
+
+    // ── Product selection ──────────────────────────────────────────────────
+    {% comment %} function selectProduct(index) {
+      const product = products[index];
+      if (!product) return;
+      selectedProduct = product;
+      
+      // Update size guide title with selected product name
+      updateSizeGuideTitle(product.title);
+      
+      cards.forEach(card => {
+        card.classList.toggle('active', Number(card.dataset.productIndex) === index);
+      });
+      const init = product.variants.find(v => v.available) || product.variants[0];
+      selectedOptions = init ? [...init.options] : [];
+      renderOptions();
+      updateSelectedVariant();
+    } {% endcomment %}
+
+    function selectProduct(index) {
+  const product = products[index];
+  if (!product) return;
+  selectedProduct = product;
+  
+  // Update size guide title with selected product name
+  updateSizeGuideTitle(product.title);
+  
+  // সব কার্ড থেকে active ক্লাস রিমুভ করুন
+  cards.forEach(card => {
+    card.classList.remove('active');
+  });
+  
+  // সিলেক্ট করা কার্ডে active ক্লাস যোগ করুন
+  const selectedCard = root.querySelector(`[data-product-index="${index}"]`);
+  if (selectedCard) {
+    selectedCard.classList.add('active');
+  }
+  
+  // সব কার্ডের স্ট্যাটাস আপডেট করুন
+  cards.forEach((card, idx) => {
+    const wrapper = card.querySelector('.prod-status-wrapper');
+    if (!wrapper) return;
+    
+    const activeStatus = wrapper.querySelector('.status-active');
+    const shippingStatus = wrapper.querySelector('.status-shipping');
+    
+    if (idx === index) {
+      // সিলেক্ট করা কার্ড - "Tap to view →" দেখান
+      if (activeStatus) activeStatus.style.display = 'block';
+      if (shippingStatus) shippingStatus.style.display = 'none';
+    } else {
+      // বাকি কার্ড - শিপিং ডেট দেখান
+      if (activeStatus) activeStatus.style.display = 'none';
+      if (shippingStatus) shippingStatus.style.display = 'block';
+    }
+  });
+  
+  const init = product.variants.find(v => v.available) || product.variants[0];
+  selectedOptions = init ? [...init.options] : [];
+  renderOptions();
+  updateSelectedVariant();
+}
+
+
     // ── Update all prices based on selected variant ────────────────────────
     function updateAllPrices() {
       if (!selectedVariant) return;
@@ -1782,6 +2186,7 @@
       const product = products[index];
       if (!product) return;
       selectedProduct = product;
+      updateSizeGuideTitle(product.title);
       cards.forEach(card => {
         card.classList.toggle('active', Number(card.dataset.productIndex) === index);
       });
@@ -2109,6 +2514,8 @@
 
       if (modalTitle) modalTitle.textContent = product.title;
 
+      updateSizeGuideTitle(product.title);
+
       const currentPrice = variant ? discountedPrice(variant.price) : discountedPrice(product.price);
       const originalPrice = variant ? variant.price : product.price;
 
@@ -2120,7 +2527,10 @@
         }
       }
 
-      if (modalDesc) modalDesc.textContent = product.description || '';
+      if (modalDesc) {
+        // Use innerHTML to preserve formatting and show full description
+        modalDesc.innerHTML = product.description || '';
+      }
 
       openModal(productModal);
     }
@@ -2191,6 +2601,74 @@
     // Initialize with first product
     selectProduct(0);
   }
+
+      // ── Size Guide Unit Toggle ──────────────────────────────────────────
+    window.setSizeUnit = function(sid, unit) {
+      const cells = document.querySelectorAll('.sz-cell-' + sid);
+      const cmBtn = document.getElementById('size-btn-cm-' + sid);
+      const inBtn = document.getElementById('size-btn-in-' + sid);
+      const label = document.getElementById('size-unit-label-' + sid);
+      
+      cells.forEach(cell => {
+        const cm = parseFloat(cell.dataset.cm);
+        if (unit === 'in') {
+          cell.textContent = (cm / 2.54).toFixed(2);
+        } else {
+          cell.textContent = cm % 1 === 0 ? cm : cm.toFixed(2);
+        }
+      });
+      
+      if (label) {
+        label.textContent = unit === 'cm' ? 'centimetres (cm)' : 'inches (in)';
+      }
+      
+      if (cmBtn) {
+        cmBtn.className = unit === 'cm' ? 'active' : 'inactive';
+      }
+      if (inBtn) {
+        inBtn.className = unit === 'in' ? 'active' : 'inactive';
+      }
+    };
+
+    // ── Override size guide open/close ──────────────────────────────────
+    const sizeModal = document.getElementById('circle-size-modal-' + sid);
+    const sizeCloseBtn = document.getElementById('circle-size-close-' + sid);
+    
+    if (sizeCloseBtn) {
+      sizeCloseBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        closeModal(sizeModal);
+      });
+    }
+    
+    if (sizeModal) {
+      sizeModal.addEventListener('click', function(e) {
+        if (e.target === this) {
+          closeModal(this);
+        }
+      });
+    }
+    
+    // Override the size guide link in renderOptions to use the modal
+    const originalRenderOptions = renderOptions;
+    renderOptions = function() {
+      originalRenderOptions.call(this);
+      
+      // Re-attach size guide link to use the modal
+      const sizeGuideLinks = document.querySelectorAll('.circle-size-guide-link');
+      sizeGuideLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+          e.preventDefault();
+          const modal = document.getElementById('circle-size-modal-' + sid);
+          if (modal) {
+            if (selectedProduct) {
+              updateSizeGuideTitle(selectedProduct.title);
+            }
+            openModal(modal);
+          };
+        });
+      });
+    };
 })();
 </script>
 
@@ -2331,7 +2809,6 @@
     { "type": "color", "id": "border_color", "label": "Border / divider", "default": "#e2dfd9" },
     { "type": "color", "id": "accent_color", "label": "Accent (forest green)", "default": "#1a3a2a" },
     { "type": "color", "id": "warning_color", "label": "Warning (scarcity)", "default": "#b8341b" },
-    { "type": "color", "id": "image_bg_color", "label": "Image placeholder bg", "default": "#e8e5e0" }
   ],
   "presets": [{ "name": "Circle Member Offer" }]
 }
