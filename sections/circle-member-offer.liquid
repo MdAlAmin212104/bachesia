@@ -272,7 +272,7 @@
 
           <!-- Phase 3 / Public Release -->
           {% if section.settings.enable_phase_3 %}
-            <div class="circle-drop-cell {% if active_phase == 3 %}active-drop{% else %}locked{% endif %}">
+            <div class="circle-drop-cell {% if active_phase == 3 or active_phase == 0 %}active-drop{% else %}locked{% endif %}">
               <div class="circle-drop-num">Public Release</div>
 
               {% if active_phase == 1 or active_phase == 2 %}
@@ -297,7 +297,7 @@
               </div>
             </div>
           {% else %}
-            <div class="circle-drop-cell public-release">
+            <div class="circle-drop-cell {% if active_phase == 0 %}active-drop{% else %}public-release{% endif %}">
               <div class="circle-drop-num">Public Release</div>
               <div class="circle-drop-price" data-strip-price="public">
                 {% if ref_product_price > 0 %}{{ ref_product_price | money }}{% else %}Full price{% endif %}
