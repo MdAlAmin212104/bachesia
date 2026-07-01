@@ -36,7 +36,7 @@
   assign active_end_ts = 0
   assign active_shipping_note_1 = ''
   assign active_shipping_note_2 = ''
-  assign active_shipping_text = ''
+  assign active_shipping_text = 'Closed'
   assign active_tagline = ''
   assign active_phase_name = ''
 
@@ -172,11 +172,14 @@
         </div>
       </nav>
 
-      {% if offer_active %}
         <div class="circle-hero">
           <div class="circle-live-line">
-            <span class="circle-live-dot"></span>
-            {{ active_label }} open now
+            <span class="circle-live-dot" {% if active_phase == 0 %}style="background: #9a9792; animation: none;"{% endif %}></span>
+            {% if active_phase > 0 %}
+              {{ active_label }} open now
+            {% else %}
+              Closed
+            {% endif %}
           </div>
           <h1>
             {{ section.settings.welcome_heading }}
@@ -227,7 +230,7 @@
             {% endif %}
             {% unless active_phase == 1 %}
               <div class="circle-drop-tag">
-                {% if active_phase > 1 %}
+                {% if active_phase > 1 or active_phase == 0 %}
                   Closed
                 {% else %}
                   Locked
@@ -262,7 +265,7 @@
               </div>
               <div class="circle-drop-label">{{ section.settings.phase_2_short }}</div>
               <div class="circle-drop-tag">
-                {% if active_phase == 2 %}Open now{% elsif active_phase > 2 %}Closed{% else %}Locked{% endif %}
+                {% if active_phase == 2 %}Open now{% elsif active_phase > 2 or active_phase == 0 %}Closed{% else %}Locked{% endif %}
               </div>
             </div>
           {% endunless %}
@@ -302,7 +305,7 @@
               <div class="circle-drop-label">
                 {{ section.settings.public_release_label | default: 'No member benefits' }}
               </div>
-              <div class="circle-drop-tag">Coming soon</div>
+              <div class="circle-drop-tag">{% if active_phase == 0 %}Closed{% else %}Coming soon{% endif %}</div>
             </div>
           {% endif %}
         </div>
@@ -451,7 +454,7 @@
                             {% elsif active_phase == 3 %}
                               Ships in ~60 days
                             {% else %}
-                              Available now
+                              Closed
                             {% endif %}
                           </div>
                         {% else %}
@@ -500,16 +503,23 @@
 
         <!-- RESERVE CARD -->
         <div class="circle-action-block">
-          <div class="circle-action-eyebrow">{{ active_label }} — {{ active_title }}</div>
+          <div class="circle-action-eyebrow">
+            {% if active_phase > 0 %}
+              {{ active_label }} — {{ active_title }}
+            {% else %}
+              Offer Closed
+            {% endif %}
+          </div>
           <div style="margin-bottom:10px;">
             <span
               class="drop-tag"
-              style="background:var(--forest-tint);color:var(--forest);font-size:9px;letter-spacing:0.16em;text-transform:uppercase;padding:6px 16px;border-radius:99px;display:inline-block;"
-              >Open now</span
+              style="background:{% if active_phase > 0 %}var(--forest-tint){% else %}#e2dfd9{% endif %};color:{% if active_phase > 0 %}var(--forest){% else %}#9a9792{% endif %};font-size:9px;letter-spacing:0.16em;text-transform:uppercase;padding:6px 16px;border-radius:99px;display:inline-block;"
             >
+              {% if active_phase > 0 %}Open now{% else %}Closed{% endif %}
+            </span>
           </div>
 
-          <div class="circle-countdown-wrap">
+          <div class="circle-countdown-wrap" {% if active_phase == 0 %}style="display:none;"{% endif %}>
             <div class="circle-countdown-label">{{ active_label }} ends in</div>
             <div class="circle-countdown">
               <div class="circle-t-block">
@@ -532,7 +542,7 @@
 
           <div class="circle-price-block">
             <div class="circle-price-main">
-              <div class="circle-price-context">Your price today</div>
+              <div class="circle-price-context">{% if active_phase > 0 %}Your price today{% else %}Member Price{% endif %}</div>
               <div style="display: flex;">
                 <div class="circle-price-amount" data-preview-sale-price>—</div>
                 <span
@@ -550,8 +560,8 @@
             </div>
           </div>
 
-          <button type="button" class="circle-cta-btn" data-reserve-main>
-            {{ section.settings.reserve_button_text }}
+          <button type="button" class="circle-cta-btn" data-reserve-main {% if active_phase == 0 %}disabled{% endif %}>
+            {% if active_phase == 0 %}Offer ended{% else %}{{ section.settings.reserve_button_text }}{% endif %}
           </button>
           <div class="circle-cta-meta">
             <p>{{ active_shipping_note_1 }}</p>
@@ -640,32 +650,7 @@
           </div>
         {% endif %}
 
-      {% else %}
-        <!-- ENDED STATE -->
-        <div class="circle-login-card circle-ended-card">
-          <div class="circle-login-eyebrow">{{ section.settings.ended_eyebrow }}</div>
-          <h1>{{ section.settings.ended_heading }}</h1>
-          <p>{{ section.settings.ended_text }}</p>
-          {% if customer and customer.accepts_marketing %}
-            <div class="circle-already-subscribed">
-              <strong>You're already on the list.</strong>
-              <p>We'll notify you when the next Circle offer launches.</p>
-            </div>
-          {% else %}
-            {% form 'customer', class: 'circle-waitlist-form ended' %}
-              <input type="hidden" name="contact[tags]" value="circle-waitlist">
-              <input
-                type="email"
-                name="contact[email]"
-                value=""
-                placeholder="Email address"
-                required
-              >
-              <button type="submit" class="circle-main-btn">{{ section.settings.ended_button_text }}</button>
-            {% endform %}
-          {% endif %}
-        </div>
-      {% endif %}
+
     </div>
     <!-- /.circle-offer-content -->
   </div>
@@ -914,7 +899,7 @@
     </div>
   </div>
 
-  {% if offer_active and offer_collection != blank %}
+  {% if offer_collection != blank %}
     <script type="application/json" id="CircleProducts-{{ sid }}">
       [
         {% assign printed_first = false %}
@@ -1460,8 +1445,6 @@
                 .circle-{{ sid }} .circle-modal-img-next {  position: absolute; top: 50%; transform: translateY(-50%); width: 36px; height: 36px; border-radius: 50%; color: gray; cursor: pointer; display: flex; align-items: center; justify-content: center; z-index: 3; transition: all .15s; }
                 .circle-{{ sid }} .circle-modal-img-prev { left: 12px; }
                 .circle-{{ sid }} .circle-modal-img-next { right: 12px; }
-                .circle-{{ sid }} .circle-modal-img-prev:hover,
-                .circle-{{ sid }} .circle-modal-img-next:hover { background: #fff; }
                 .circle-{{ sid }} .circle-modal-img-dots { position: absolute; bottom: 12px; left: 50%; transform: translateX(-50%); display: flex; gap: 5px; }
                 .circle-{{ sid }} .circle-modal-img-dot { width: 5px; height: 5px; border-radius: 50%; background: rgba(255,255,255,.5); border: none; cursor: pointer; padding: 0; transition: all .2s; }
                 .circle-{{ sid }} .circle-modal-img-dot.active { background: #fff; width: 14px; border-radius: 3px; }
@@ -2378,17 +2361,22 @@
       }
 
       if (mainReserveBtn) {
-        mainReserveBtn.disabled = !selectedVariant.available;
-        if (!selectedVariant.available) {
-          mainReserveBtn.textContent = 'Sold out';
-        } else if (discountPercent > 0) {
-          const shortTitle = getFirstThreeWords(selectedProduct.title);
-          const variantText = selectedVariant.title === 'Default Title' ? '' : ` / ${selectedVariant.title}`;
-          mainReserveBtn.textContent = `Secure my pair - ${shortTitle}${variantText}`;
+        if (activePhase === 0) {
+          mainReserveBtn.disabled = true;
+          mainReserveBtn.textContent = 'Offer ended';
         } else {
-          const shortTitle = getFirstThreeWords(selectedProduct.title);
-          const variantText = selectedVariant.title === 'Default Title' ? '' : ` — ${selectedVariant.title}`;
-          mainReserveBtn.textContent = `Reserve /${shortTitle}${variantText}`;
+          mainReserveBtn.disabled = !selectedVariant.available;
+          if (!selectedVariant.available) {
+            mainReserveBtn.textContent = 'Sold out';
+          } else if (discountPercent > 0) {
+            const shortTitle = getFirstThreeWords(selectedProduct.title);
+            const variantText = selectedVariant.title === 'Default Title' ? '' : ` / ${selectedVariant.title}`;
+            mainReserveBtn.textContent = `Secure my pair - ${shortTitle}${variantText}`;
+          } else {
+            const shortTitle = getFirstThreeWords(selectedProduct.title);
+            const variantText = selectedVariant.title === 'Default Title' ? '' : ` — ${selectedVariant.title}`;
+            mainReserveBtn.textContent = `Reserve /${shortTitle}${variantText}`;
+          }
         }
       }
     }
@@ -2655,12 +2643,10 @@
           mainReserveBtn.textContent = 'Offer ended';
         }
 
-        // Time's up — force every product card's status to "Closed"
+        // Time's up — force every product card's shipping status to "Closed"
         // (sold-out cards are untouched since they don't have these classes)
         root.querySelectorAll('.prod-status-wrapper').forEach(wrapper => {
-          const activeStatus = wrapper.querySelector('.status-active');
           const shippingStatus = wrapper.querySelector('.status-shipping');
-          if (activeStatus) activeStatus.textContent = 'Closed';
           if (shippingStatus) shippingStatus.textContent = 'Closed';
         });
       }
