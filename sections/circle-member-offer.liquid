@@ -40,47 +40,45 @@
   assign active_tagline = ''
   assign active_phase_name = ''
 
-  if section.settings.offer_enabled
-    if now_ts >= p1_start_ts and now_ts <= p1_end_ts
-      assign active_phase = 1
-      assign active_discount = section.settings.phase_1_discount | plus: 0
-      assign active_code = section.settings.phase_1_discount_code
-      assign active_title = section.settings.phase_1_title
-      assign active_label = section.settings.phase_1_label
-      assign active_start_ts = p1_start_ts
-      assign active_end_ts = p1_end_ts
-      assign active_shipping_note_1 = section.settings.phase_1_shipping_note1
-      assign active_shipping_note_2 = section.settings.phase_1_shipping_note2
-      assign active_shipping_text = 'In your hands in ~14 days'
-      assign active_tagline = 'Yours before<br><em>the rest of the world.</em>'
-      assign active_phase_name = 'Drop 1'
-    elsif now_ts >= p2_start_ts and now_ts <= p2_end_ts
-      assign active_phase = 2
-      assign active_discount = section.settings.phase_2_discount | plus: 0
-      assign active_code = section.settings.phase_2_discount_code
-      assign active_title = section.settings.phase_2_title
-      assign active_label = section.settings.phase_2_label
-      assign active_start_ts = p2_start_ts
-      assign active_end_ts = p2_end_ts
-      assign active_shipping_note_1 = section.settings.phase_2_shipping_note1
-      assign active_shipping_note_2 = section.settings.phase_2_shipping_note2
-      assign active_shipping_text = 'In your hands in ~30 days'
-      assign active_tagline = 'Yours before<br><em>the rest of the world.</em>'
-      assign active_phase_name = 'Drop 2'
-    elsif section.settings.enable_phase_3 and now_ts >= p3_start_ts and now_ts <= p3_end_ts
-      assign active_phase = 3
-      assign active_discount = section.settings.phase_3_discount | plus: 0
-      assign active_code = section.settings.phase_3_discount_code
-      assign active_title = section.settings.phase_3_title
-      assign active_label = section.settings.phase_3_label
-      assign active_start_ts = p3_start_ts
-      assign active_end_ts = p3_end_ts
-      assign active_shipping_note_1 = section.settings.phase_3_shipping_note1
-      assign active_shipping_note_2 = section.settings.phase_3_shipping_note2
-      assign active_shipping_text = 'In your hands in ~60 days'
-      assign active_tagline = 'Available now<br><em>for everyone</em>'
-      assign active_phase_name = 'Public Release'
-    endif
+  if now_ts >= p1_start_ts and now_ts <= p1_end_ts
+    assign active_phase = 1
+    assign active_discount = section.settings.phase_1_discount | plus: 0
+    assign active_code = section.settings.phase_1_discount_code
+    assign active_title = section.settings.phase_1_title
+    assign active_label = section.settings.phase_1_label
+    assign active_start_ts = p1_start_ts
+    assign active_end_ts = p1_end_ts
+    assign active_shipping_note_1 = section.settings.phase_1_shipping_note1
+    assign active_shipping_note_2 = section.settings.phase_1_shipping_note2
+    assign active_shipping_text = 'In your hands in ~14 days'
+    assign active_tagline = 'Yours before<br><em>the rest of the world.</em>'
+    assign active_phase_name = 'Drop 1'
+  elsif now_ts >= p2_start_ts and now_ts <= p2_end_ts
+    assign active_phase = 2
+    assign active_discount = section.settings.phase_2_discount | plus: 0
+    assign active_code = section.settings.phase_2_discount_code
+    assign active_title = section.settings.phase_2_title
+    assign active_label = section.settings.phase_2_label
+    assign active_start_ts = p2_start_ts
+    assign active_end_ts = p2_end_ts
+    assign active_shipping_note_1 = section.settings.phase_2_shipping_note1
+    assign active_shipping_note_2 = section.settings.phase_2_shipping_note2
+    assign active_shipping_text = 'In your hands in ~30 days'
+    assign active_tagline = 'Yours before<br><em>the rest of the world.</em>'
+    assign active_phase_name = 'Drop 2'
+  elsif section.settings.enable_phase_3 and now_ts >= p3_start_ts and now_ts <= p3_end_ts
+    assign active_phase = 3
+    assign active_discount = section.settings.phase_3_discount | plus: 0
+    assign active_code = section.settings.phase_3_discount_code
+    assign active_title = section.settings.phase_3_title
+    assign active_label = section.settings.phase_3_label
+    assign active_start_ts = p3_start_ts
+    assign active_end_ts = p3_end_ts
+    assign active_shipping_note_1 = section.settings.phase_3_shipping_note1
+    assign active_shipping_note_2 = section.settings.phase_3_shipping_note2
+    assign active_shipping_text = 'In your hands in ~60 days'
+    assign active_tagline = 'Available now<br><em>for everyone</em>'
+    assign active_phase_name = 'Public Release'
   endif
 
   assign offer_active = false
@@ -381,82 +379,102 @@
                       </div>
                       <div class="circle-prod-info">
                         <div class="circle-prod-name">{{ product.title }}</div>
-                        {% comment %} {% if product.available %}
-                          <div class="circle-prod-pricing">
-                            <span data-product-price-display>{{ sale_price | money }}</span>
-                            {% if active_discount > 0 %}
-                              <s data-product-compare-price-display>{{ product.price_min | money }}</s>
+                        {% comment %}
+                          {% if product.available %}
+                            <div class="circle-prod-pricing">
+                              <span data-product-price-display>{{ sale_price | money }}</span>
+                              {% if active_discount > 0 %}
+                                <s data-product-compare-price-display>{{ product.price_min | money }}</s>
+                              {% endif %}
+                            </div>
+                          {% else %}
+                            <div class="circle-prod-status sold-label">Sold out</div>
+                          {% endif %}
+                        {% endcomment %}
+                      </div>
+                      {% comment %}
+                        <button
+                          type="button"
+                          class="circle-prod-details-btn"
+                          data-prod-details-btn
+                          data-product-id="{{ product.id }}"
+                          data-product-index="{{ loop_index }}"
+                          aria-label="View product details"
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="14"
+                            height="14"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          >
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <path d="M11 8v6M8 11h6"></path>
+                          </svg>
+                          <span>View Product</span>
+                        </button>
+                      {% endcomment %}
+                      {% comment %}
+                        <div class="prod-status"
+                          data-prod-details-btn
+                          data-product-id="{{ product.id }}"
+                          data-product-index="{{ loop_index }}"
+                          aria-label="View product details"
+                          style="color:var(--forest);">
+                          Tap to view →
+                        </div>
+                      {% endcomment %}
+                      <div class="prod-status-wrapper" data-product-index="{{ loop_index }}">
+                        {% if product.available %}
+                          <div
+                            class="prod-status status-active"
+                            data-prod-details-btn
+                            data-product-id="{{ product.id }}"
+                            data-product-index="{{ loop_index }}"
+                            aria-label="View product details"
+                            style="color:var(--forest);cursor:pointer;display:none;"
+                          >
+                            Tap to view →
+                          </div>
+                          <div
+                            class="prod-status status-shipping"
+                            style="color:#9a9792;font-size:8px;letter-spacing:0.08em;text-transform:uppercase;"
+                          >
+                            {% if active_phase == 1 %}
+                              Ships in ~14 days
+                            {% elsif active_phase == 2 %}
+                              Ships in ~30 days
+                            {% elsif active_phase == 3 %}
+                              Ships in ~60 days
+                            {% else %}
+                              Available now
                             {% endif %}
                           </div>
                         {% else %}
-                          <div class="circle-prod-status sold-label">Sold out</div>
-                        {% endif %} {% endcomment %}
+                          <div
+                            class="prod-status"
+                            style="color:#9a9792;font-size:8px;letter-spacing:0.08em;text-transform:uppercase;"
+                          >
+                            Sold out
+                          </div>
+                        {% endif %}
                       </div>
-                      {% comment %} <button
-                        type="button"
-                        class="circle-prod-details-btn"
-                        data-prod-details-btn
-                        data-product-id="{{ product.id }}"
-                        data-product-index="{{ loop_index }}"
-                        aria-label="View product details"
-                      >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="14"
-                          height="14"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          stroke-width="2"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                        >
-                          <circle cx="11" cy="11" r="8"></circle>
-                          <path d="M11 8v6M8 11h6"></path>
-                        </svg>
-                        <span>View Product</span>
-                      </button> {% endcomment %}
-                      {% comment %} <div class="prod-status"
-                        data-prod-details-btn
-                        data-product-id="{{ product.id }}"
-                        data-product-index="{{ loop_index }}"
-                        aria-label="View product details"
-                        style="color:var(--forest);">
-                        Tap to view →
-                      </div> {% endcomment %}
-                      <div class="prod-status-wrapper" data-product-index="{{ loop_index }}">
-  {% if product.available %}
-    <div class="prod-status status-active" 
-      data-prod-details-btn
-      data-product-id="{{ product.id }}"
-      data-product-index="{{ loop_index }}"
-      aria-label="View product details"
-      style="color:var(--forest);cursor:pointer;display:none;">
-      Tap to view →
-    </div>
-    <div class="prod-status status-shipping" style="color:#9a9792;font-size:8px;letter-spacing:0.08em;text-transform:uppercase;">
-      {% if active_phase == 1 %}
-        Ships in ~14 days
-      {% elsif active_phase == 2 %}
-        Ships in ~30 days
-      {% elsif active_phase == 3 %}
-        Ships in ~60 days
-      {% else %}
-        Available now
-      {% endif %}
-    </div>
-  {% else %}
-    <div class="prod-status" style="color:#9a9792;font-size:8px;letter-spacing:0.08em;text-transform:uppercase;">
-      Sold out
-    </div>
-  {% endif %}
-</div>
                     </div>
                     {% assign loop_index = loop_index | plus: 1 %}
                   {% endfor %}
                 </div>
               </div>
-              <button type="button" class="circle-arrow circle-arrow-next" data-arrow="next" aria-label="Next">
+              <button
+                type="button"
+                class="circle-arrow circle-arrow-next"
+                style="font-size: 30px;"
+                data-arrow="next"
+                aria-label="Next"
+              >
                 <svg
                   viewBox="0 0 24 24"
                   width="16"
@@ -519,7 +537,8 @@
                 <div class="circle-price-amount" data-preview-sale-price>—</div>
                 <span
                   class="inner_circle"
-                  style="font-size:18px;font-weight:300;color:#1a3a2a;  margin-left: 10px; font-family: Cormorant Garamond";
+                  style="font-size:18px;font-weight:300;color:#1a3a2a;  margin-left: 10px; font-family: Cormorant Garamond"
+                  ;
                 >
                   (Inner Circle)</span
                 >
@@ -663,18 +682,20 @@
   >
     <div class="circle-modal">
       <button type="button" class="circle-modal-close" id="circle-modal-close-{{ sid }}" aria-label="Close">
-        {% comment %} <svg
-          viewBox="0 0 24 24"
-          width="18"
-          height="18"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        >
-          <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
-        </svg> {% endcomment %}
+        {% comment %}
+          <svg
+            viewBox="0 0 24 24"
+            width="18"
+            height="18"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        {% endcomment %}
         ✕
       </button>
 
@@ -688,7 +709,7 @@
           class="circle-modal-img-prev"
           data-modal-img-prev
           aria-label="Previous image"
-          style="display:none;"
+          style="display:none; font-size: 30px;"
         >
           <svg
             viewBox="0 0 24 24"
@@ -708,7 +729,7 @@
           class="circle-modal-img-next"
           data-modal-img-next
           aria-label="Next image"
-          style="display:none;"
+          style="display:none; font-size: 30px;"
         >
           <svg
             viewBox="0 0 24 24"
@@ -759,40 +780,42 @@
   </div>
 
   <!-- ═══ SIZE GUIDE MODAL ═══ -->
-  {% comment %} <div
-    class="circle-modal-overlay"
-    id="circle-size-modal-{{ sid }}"
-    style="display:none;"
-    role="dialog"
-    aria-modal="true"
-    aria-label="Size guide"
-  >
-    <div class="circle-modal circle-size-modal">
-      <button type="button" class="circle-modal-close" id="circle-size-close-{{ sid }}" aria-label="Close">
-        <svg
-          viewBox="0 0 24 24"
-          width="18"
-          height="18"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        >
-          <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
-        </svg>
-      </button>
-      <div class="circle-modal-body">
-        <div class="circle-modal-title" style="margin-bottom:20px;">
-          {{ section.settings.size_guide_title | default: 'Size Guide' }}
-        </div>
-        <div class="circle-size-guide-content">
-          {{ section.settings.size_guide_content }}
+  {% comment %}
+    <div
+      class="circle-modal-overlay"
+      id="circle-size-modal-{{ sid }}"
+      style="display:none;"
+      role="dialog"
+      aria-modal="true"
+      aria-label="Size guide"
+    >
+      <div class="circle-modal circle-size-modal">
+        <button type="button" class="circle-modal-close" id="circle-size-close-{{ sid }}" aria-label="Close">
+          <svg
+            viewBox="0 0 24 24"
+            width="18"
+            height="18"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+        <div class="circle-modal-body">
+          <div class="circle-modal-title" style="margin-bottom:20px;">
+            {{ section.settings.size_guide_title | default: 'Size Guide' }}
+          </div>
+          <div class="circle-size-guide-content">
+            {{ section.settings.size_guide_content }}
+          </div>
         </div>
       </div>
     </div>
-  </div> {% endcomment %}
-    <!-- ═══ SIZE GUIDE MODAL ═══ -->
+  {% endcomment %}
+  <!-- ═══ SIZE GUIDE MODAL ═══ -->
   <div
     class="circle-modal-overlay circle-size-modal-overlay"
     id="circle-size-modal-{{ sid }}"
@@ -802,13 +825,25 @@
     aria-label="Size guide"
   >
     <div class="circle-modal circle-size-modal" style="max-height:85vh;overflow-y:auto;">
-      
       <div style="padding:24px 24px 0;display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
         <div>
-          <div style="font-size:9px;letter-spacing:0.24em;text-transform:uppercase;color:var(--muted);margin-bottom:4px;">Jaffary</div>
-          <div style="font-family:var(--serif);font-size:22px;font-weight:400;color:var(--ink);" id="size-guide-title-{{ sid }}">Size Guide aaaa</div>
+          <div style="font-size:9px;letter-spacing:0.24em;text-transform:uppercase;color:var(--muted);margin-bottom:4px;">
+            Jaffary
+          </div>
+          <div
+            style="font-family:var(--serif);font-size:22px;font-weight:400;color:var(--ink);"
+            id="size-guide-title-{{ sid }}"
+          >
+            Size Guide aaaa
+          </div>
         </div>
-        <button type="button" class="circle-modal-close" id="circle-size-close-{{ sid }}" aria-label="Close" style="position:static;width:32px;height:32px;border-radius:50%;background:var(--bg);border:0.5px solid var(--stone);cursor:pointer;font-size:16px;color:var(--muted);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+        <button
+          type="button"
+          class="circle-modal-close"
+          id="circle-size-close-{{ sid }}"
+          aria-label="Close"
+          style="position:static;width:32px;height:32px;border-radius:50%;background:var(--bg);border:0.5px solid var(--stone);cursor:pointer;font-size:16px;color:var(--muted);display:flex;align-items:center;justify-content:center;flex-shrink:0;"
+        >
           ✕
         </button>
       </div>
@@ -842,16 +877,21 @@
               <td class="sz-cell-{{ sid }}" data-cm="95.89">95.89</td>
             </tr>
             <tr>
-              <td style="
-    background: #0e0e0d;
-    color: rgba(255,255,255,1);
-    padding: 13px 16px;
-    font-size: 9px;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    font-weight: 400;
-    white-space: nowrap;
-    width: 90px;">Hips</td>
+              <td
+                style="
+                  background: #0e0e0d;
+                  color: rgba(255,255,255,1);
+                  padding: 13px 16px;
+                  font-size: 9px;
+                  letter-spacing: 0.12em;
+                  text-transform: uppercase;
+                  font-weight: 400;
+                  white-space: nowrap;
+                  width: 90px;
+                "
+              >
+                Hips
+              </td>
               <td class="sz-cell-{{ sid }}" data-cm="101">101</td>
               <td class="sz-cell-{{ sid }}" data-cm="105.14">105.14</td>
               <td class="sz-cell-{{ sid }}" data-cm="109.22">109.22</td>
@@ -867,10 +907,10 @@
           </tbody>
         </table>
         <p style="font-size:9px;color:var(--faint);letter-spacing:0.06em;line-height:1.8;margin-top:16px;">
-          All measurements in <span id="size-unit-label-{{ sid }}">centimetres (cm)</span>. Measure your body, not the garment.
+          All measurements in <span id="size-unit-label-{{ sid }}">centimetres (cm)</span>. Measure your body, not the
+          garment.
         </p>
       </div>
-
     </div>
   </div>
 
@@ -924,805 +964,803 @@
 </section>
 
 <style>
+    .circle-{{ sid }} .circle-prod.active > .prod-status{
+      opacity: 1;
+    }
 
-  .circle-{{ sid }} .circle-prod.active > .prod-status{
-    opacity: 1;
-  }
-
-  .prod-status {
-    font-size: 9px;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: #1a3a2a;
-    margin-bottom: 10px;
-  }
-            /* ── PRODUCT DETAILS BUTTON ── */
-          .circle-{{ sid }} .circle-prod {
-            position: relative;
-            height: 100%;
-          }
-
-          .circle-{{ sid }} .circle-prod-details-btn {
+    .prod-status {
+      font-size: 9px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #1a3a2a;
+      margin-bottom: 10px;
+    }
+              /* ── PRODUCT DETAILS BUTTON ── */
+            .circle-{{ sid }} .circle-prod {
               position: relative;
-              bottom: 10px;
-              right: 0px;
-              display: inline-flex;
-              align-items: center;
-              gap: 6px;
-              background: rgba(255, 255, 255, 0.95);
-              backdrop-filter: blur(4px);
-              -webkit-backdrop-filter: blur(4px);
-              border: 0.5px solid #e0ddd8;
-              border-radius: 99px;
-              padding: 6px 14px;
-              font-family: inherit;
-              font-size: 9px;
-              font-weight: 500;
-              letter-spacing: 0.08em;
-              text-transform: uppercase;
-              color: #111111;
-              cursor: pointer;
-              transition: all 0.2s ease;
-              z-index: 5;
-              opacity: 1;
-              pointer-events: none;
-              width: 88%;
-              margin: 10px;
-              text-align: center;
-              display: flex;
-              justify-content: center;
-          }
+              height: 100%;
+            }
 
-          .circle-{{ sid }} .circle-prod:hover .circle-prod-details-btn {
-            opacity: 1;
-            transform: translateY(0);
-            pointer-events: auto;
-          }
-
-          .circle-{{ sid }} .circle-prod-details-btn:hover {
-            background: {{ section.settings.accent_color }};
-            border-color: {{ section.settings.accent_color }};
-            color: #fff;
-          }
-
-          .circle-{{ sid }} .circle-prod-details-btn svg {
-            width: 10px;
-            height: 10px;
-            transition: transform 0.15s ease;
-          }
-
-          .circle-{{ sid }} .circle-prod-details-btn:hover svg {
-            transform: scale(1.1);
-          }
-
-          .circle-{{ sid }} .circle-prod.sold .circle-prod-details-btn {
-            display: none;
-          }
-
-          @media (max-width: 768px) {
             .circle-{{ sid }} .circle-prod-details-btn {
+                position: relative;
+                bottom: 10px;
+                right: 0px;
+                display: inline-flex;
+                align-items: center;
+                gap: 6px;
+                background: rgba(255, 255, 255, 0.95);
+                backdrop-filter: blur(4px);
+                -webkit-backdrop-filter: blur(4px);
+                border: 0.5px solid #e0ddd8;
+                border-radius: 99px;
+                padding: 6px 14px;
+                font-family: inherit;
+                font-size: 9px;
+                font-weight: 500;
+                letter-spacing: 0.08em;
+                text-transform: uppercase;
+                color: #111111;
+                cursor: pointer;
+                transition: all 0.2s ease;
+                z-index: 5;
+                opacity: 1;
+                pointer-events: none;
+                width: 88%;
+                margin: 10px;
+                text-align: center;
+                display: flex;
+                justify-content: center;
+            }
+
+            .circle-{{ sid }} .circle-prod:hover .circle-prod-details-btn {
               opacity: 1;
               transform: translateY(0);
               pointer-events: auto;
-              padding: 5px 10px;
-              font-size: 8px;
-              background: rgba(0, 0, 0, 0.7);
-              backdrop-filter: blur(8px);
-              color: white;
-              border-color: rgba(255, 255, 255, 0.2);
+            }
+
+            .circle-{{ sid }} .circle-prod-details-btn:hover {
+              background: {{ section.settings.accent_color }};
+              border-color: {{ section.settings.accent_color }};
+              color: #fff;
             }
 
             .circle-{{ sid }} .circle-prod-details-btn svg {
-              stroke: white;
-            }
-          }
-
-          :root {
-              --bg: #f0efeb;
-              --ink: #0e0e0d;
-              --forest: #1a3a2a;
-              --forest-mid: #2d5c42;
-              --forest-tint: #eaf2ed;
-              --stone: #e2dfd9;
-              --muted: #9a9792;
-              --faint: #213C33;
-              --card: #faf9f7;
-              --serif: 'Cormorant Garamond', serif;
-              --mono: 'DM Mono', monospace;
+              width: 10px;
+              height: 10px;
+              transition: transform 0.15s ease;
             }
 
-            .drop-label_circle {
-        font-size: 10px;
-        letter-spacing: 0.12em;
-        text-transform: uppercase;
-        color: #c4c1bc;
-        margin-bottom: 10px;
-    }
-
-            .hero-sub {
-              font-size: 13px;
-              color: #16120b;
-              letter-spacing: 0.03em;
-              line-height: 1.85;
-              max-width: 380px;
-              padding-left: 16px;
-              border-left: 1.5px solid var(--forest);
+            .circle-{{ sid }} .circle-prod-details-btn:hover svg {
+              transform: scale(1.1);
             }
 
-            .locked-when {
-              font-size: 9px;
-              letter-spacing: 0.08em;
-              color: #c4c1bc;
+            .circle-{{ sid }} .circle-prod.sold .circle-prod-details-btn {
+              display: none;
             }
 
-            /* ── LOCKED / NEXT DROP ROW WITH MULTIPLE DROPS ── */
-            .circle-{{ sid }} .circle-locked-drop-group {
-              display: flex;
-              flex-direction: column;
-              gap: 20px;
-              align-items: flex-end;
+            @media (max-width: 768px) {
+              .circle-{{ sid }} .circle-prod-details-btn {
+                opacity: 1;
+                transform: translateY(0);
+                pointer-events: auto;
+                padding: 5px 10px;
+                font-size: 8px;
+                background: rgba(0, 0, 0, 0.7);
+                backdrop-filter: blur(8px);
+                color: white;
+                border-color: rgba(255, 255, 255, 0.2);
+              }
+
+              .circle-{{ sid }} .circle-prod-details-btn svg {
+                stroke: white;
+              }
             }
 
-            .circle-{{ sid }} .circle-locked-drop-item {
-              display: flex;
-              flex-direction: column;
-              align-items: flex-end;
-              gap: 5px;
-            }
+            :root {
+                --bg: #f0efeb;
+                --ink: #0e0e0d;
+                --forest: #1a3a2a;
+                --forest-mid: #2d5c42;
+                --forest-tint: #eaf2ed;
+                --stone: #e2dfd9;
+                --muted: #9a9792;
+                --faint: #213C33;
+                --card: #faf9f7;
+                --serif: 'Cormorant Garamond', serif;
+                --mono: 'DM Mono', monospace;
+              }
 
-            .circle-{{ sid }} .circle-locked-drop-name {
-              font-size: 9px;
-              letter-spacing: .2em;
-              text-transform: uppercase;
-              color: {{ section.settings.muted_color }};
-              margin-bottom: 2px;
-            }
+              .drop-label_circle {
+          font-size: 10px;
+          letter-spacing: 0.12em;
+          text-transform: uppercase;
+          color: #c4c1bc;
+          margin-bottom: 10px;
+      }
 
-            .circle-{{ sid }} .circle-locked-price-amount {
-              font-family: "Cormorant Garamond", serif;
-              font-size: 24px;
-              font-weight: 600;
-              color: #c4c1bc;
-              white-space: nowrap;
-            }
+              .hero-sub {
+                font-size: 13px;
+                color: #16120b;
+                letter-spacing: 0.03em;
+                line-height: 1.85;
+                max-width: 380px;
+                padding-left: 16px;
+                border-left: 1.5px solid var(--forest);
+              }
 
-            .circle-{{ sid }} .circle-locked-drop-item .circle-locked-badge {
-              font-family: "DM Mono", monospace;
-              font-size: 8px;
-              letter-spacing: .14em;
-              text-transform: uppercase;
-              color: {{ section.settings.accent_color }};
-              background: rgba(26,58,42,.07);
-              padding: 2px 7px;
-              border-radius: 4px;
-              font-weight: 400;
-              display: inline-block;
-              margin-left: 8px;
-            }
+              .locked-when {
+                font-size: 9px;
+                letter-spacing: 0.08em;
+                color: #c4c1bc;
+              }
 
-            .circle-{{ sid }} .circle-locked-drop-item .locked-when {
-              font-size: 10px;
-              letter-spacing: 0.08em;
-              color: #c4c1bc;
-            }
-
-            @media (max-width: 480px) {
+              /* ── LOCKED / NEXT DROP ROW WITH MULTIPLE DROPS ── */
               .circle-{{ sid }} .circle-locked-drop-group {
-                align-items: flex-start;
-                width: 100%;
+                display: flex;
+                flex-direction: column;
+                gap: 20px;
+                align-items: flex-end;
               }
 
               .circle-{{ sid }} .circle-locked-drop-item {
-                align-items: flex-start;
-                width: 100%;
+                display: flex;
+                flex-direction: column;
+                align-items: flex-end;
+                gap: 5px;
               }
-            }
 
-            .circle-prod-name {
-          display: -webkit-box!important;
-          -webkit-line-clamp: 2;
-          -webkit-box-orient: vertical;
-          overflow: hidden;
-          text-overflow: ellipsis;
-          font-family: "Cormorant Garamond", serif; 
-          color: #0e0e0d;
+              .circle-{{ sid }} .circle-locked-drop-name {
+                font-size: 9px;
+                letter-spacing: .2em;
+                text-transform: uppercase;
+                color: {{ section.settings.muted_color }};
+                margin-bottom: 2px;
+              }
+
+              .circle-{{ sid }} .circle-locked-price-amount {
+                font-family: "Cormorant Garamond", serif;
+                font-size: 24px;
+                font-weight: 600;
+                color: #c4c1bc;
+                white-space: nowrap;
+              }
+
+              .circle-{{ sid }} .circle-locked-drop-item .circle-locked-badge {
+                font-family: "DM Mono", monospace;
+                font-size: 8px;
+                letter-spacing: .14em;
+                text-transform: uppercase;
+                color: {{ section.settings.accent_color }};
+                background: rgba(26,58,42,.07);
+                padding: 2px 7px;
+                border-radius: 4px;
+                font-weight: 400;
+                display: inline-block;
+                margin-left: 8px;
+              }
+
+              .circle-{{ sid }} .circle-locked-drop-item .locked-when {
+                font-size: 10px;
+                letter-spacing: 0.08em;
+                color: #c4c1bc;
+              }
+
+              @media (max-width: 480px) {
+                .circle-{{ sid }} .circle-locked-drop-group {
+                  align-items: flex-start;
+                  width: 100%;
+                }
+
+                .circle-{{ sid }} .circle-locked-drop-item {
+                  align-items: flex-start;
+                  width: 100%;
+                }
+              }
+
+              .circle-prod-name {
+            display: -webkit-box!important;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            font-family: "Cormorant Garamond", serif;
+            color: #0e0e0d;
+          }
+
+              /* ── BASE ── */
+                .circle-{{ sid }} {
+                  background: {{ section.settings.bg_color | default: '#f0efeb' }};
+                  color: {{ section.settings.text_color | default: '#0e0e0d' }};
+                  padding: {{ section.settings.section_padding_top }}px 16px {{ section.settings.section_padding_bottom }}px;
+                  font-family: "DM Mono", monospace;
+                  -webkit-font-smoothing: antialiased;
+                }
+                .circle-{{ sid }} * { box-sizing: border-box; }
+                .circle-{{ sid }} .circle-shell { max-width: {{ section.settings.max_width | default: 580 }}px; margin: 0 auto; }
+
+                /* ── NAV ── */
+                .circle-{{ sid }} .circle-nav { display: flex; justify-content: flex-end; align-items: center; gap: 16px; padding-top: 25px; }
+                .circle-{{ sid }} .circle-logo { font-family: "Cormorant Garamond", serif; font-weight: 300; font-size: 13px; letter-spacing: .4em; text-transform: uppercase; color: {{ section.settings.muted_color }}; margin-right: auto; }
+                .circle-{{ sid }} .circle-nav-right { display: flex; align-items: center; gap: 16px; }
+                .circle-{{ sid }} .circle-member-pill { font-size: 9px; letter-spacing: .18em; text-transform: uppercase; color: {{ section.settings.accent_color }}; border: 0.5px solid rgba(26,58,42,0.28); padding: 5px 14px; border-radius: 99px; }
+                .circle-{{ sid }} .circle-signout { font-size: 9px; letter-spacing: .14em; text-transform: uppercase; color: {{ section.settings.muted_color }}; text-decoration: none; transition: color .15s; }
+                .circle-{{ sid }} .circle-signout:hover { color: {{ section.settings.text_color }}; }
+
+                /* ── HERO ── */
+                .circle-{{ sid }} .circle-hero { padding: 8px 0 48px; border-bottom: 0.5px solid {{ section.settings.border_color }}; margin-bottom: 40px; }
+                .circle-{{ sid }} .circle-live-line { display: flex; align-items: center; gap: 8px; font-size: 9px; letter-spacing: .26em; text-transform: uppercase; color: {{ section.settings.accent_color }}; margin-bottom: 20px; }
+                .circle-{{ sid }} .circle-live-dot { width: 6px; height: 6px; border-radius: 50%; background: {{ section.settings.accent_color }}; animation: circlePulse-{{ sid }} 2.2s ease-in-out infinite; flex-shrink: 0; }
+                @keyframes circlePulse-{{ sid }} { 0%,100%{opacity:1;} 50%{opacity:.2;} }
+                .circle-{{ sid }} h1 { font-family: "Cormorant Garamond", serif; font-weight: 300; font-size: clamp(40px,9vw,52px); line-height: 1.06; letter-spacing: .015em; margin: 0 0 18px; }
+                .circle-{{ sid }} h1 em { color: {{ section.settings.accent_color }}; font-style: italic; }
+                .circle-{{ sid }} .circle-hero-sub { font-size: 12px; color: {{ section.settings.muted_color }}; letter-spacing: .03em; line-height: 1.85; padding-left: 16px; border-left: 1.5px solid {{ section.settings.accent_color }}; }
+                .circle-{{ sid }} .circle-hero-sub span { color: {{ section.settings.accent_color }}; }
+
+                /* ── DROP STRIP ── */
+                /* Hide Phase 2 when Phase 1 is active and Phase 3 is disabled */
+        .circle-{{ sid }}[data-active-phase="1"] .circle-drop-strip .phase-2 {
+          display: none;
         }
 
-            /* ── BASE ── */
-              .circle-{{ sid }} {
-                background: {{ section.settings.bg_color | default: '#f0efeb' }};
-                color: {{ section.settings.text_color | default: '#0e0e0d' }};
-                padding: {{ section.settings.section_padding_top }}px 16px {{ section.settings.section_padding_bottom }}px;
-                font-family: "DM Mono", monospace;
-                -webkit-font-smoothing: antialiased;
-              }
-              .circle-{{ sid }} * { box-sizing: border-box; }
-              .circle-{{ sid }} .circle-shell { max-width: {{ section.settings.max_width | default: 580 }}px; margin: 0 auto; }
+        /* Adjust grid columns for Phase 1 only when Phase 3 is disabled */
+        .circle-{{ sid }}[data-active-phase="1"]:not([data-has-phase-3="true"]) .circle-drop-strip {
+          grid-template-columns: 1fr 1fr !important;
+        }
+                .circle-{{ sid }} .circle-drop-strip { display: grid; grid-template-columns: repeat(3,1fr); gap: 1px; background: {{ section.settings.border_color }}; border-radius: 14px; overflow: hidden; margin-bottom: 36px; }
+                .circle-{{ sid }} .circle-drop-cell { background: {{ section.settings.card_color }}; padding: 22px 16px 20px; text-align: center; transition: background .15s; }
+                .circle-{{ sid }} .circle-drop-cell.active-drop { background: {{ section.settings.accent_color }}; }
+                .circle-{{ sid }} .circle-drop-cell.locked { background: #f4f3f0; }
+                .circle-{{ sid }} .circle-drop-cell.public-release { background: #e8e5e0; padding: 28px 16px; }
+                .circle-{{ sid }} .circle-drop-cell.public-release .circle-drop-num { color: #999; }
+                .circle-{{ sid }} .circle-drop-cell.public-release .circle-drop-price { color: #555; font-size: 32px; }
+                .circle-{{ sid }} .circle-drop-cell.public-release .circle-drop-label { color: #888; }
+                .circle-{{ sid }} .circle-drop-cell.public-release .circle-drop-tag { background: #ddd; color: #999; }
+                .circle-{{ sid }} .circle-drop-ships {
+                  color: #fff;
+                  font-family: "Cormorant Garamond", serif;
+                  font-size: 16px;
+                  font-weight: bold;}
+                  .circle-drop-ships_phase_3{
+                    color: #0e0e0d;
+                    font-family: "Cormorant Garamond", serif;
+                  font-size: 16px;
+                  font-weight: bold;
+                  }
+                .circle-{{ sid }} .circle-drop-num { font-size: 8px; letter-spacing: .24em; text-transform: uppercase; color: {{ section.settings.muted_color }}; margin-bottom: 8px; }
+                .circle-{{ sid }} .circle-drop-cell.active-drop .circle-drop-num { color: rgba(255,255,255,.45); }
+                .circle-{{ sid }} .circle-drop-cell.locked .circle-drop-num { color: #9a9792; }
+                .circle-{{ sid }} .circle-drop-price { font-family: "Cormorant Garamond", serif!important; font-size: 22px; font-weight: 600; line-height: 1; margin-bottom: 4px; color: {{ section.settings.text_color }}; }
+                .circle-{{ sid }} .circle-drop-cell.active-drop .circle-drop-price { color: rgba(255,255,255,0.7); margin-top: 12px; }
+                .circle-{{ sid }} .circle-drop-cell.locked .circle-drop-price { color: #141010; }
+                .circle-{{ sid }} .circle-drop-label { font-size: 9px; letter-spacing: .12em; text-transform: uppercase; color: #9a9792; margin-bottom: 10px; margin-top: 5px;}
+                .circle-{{ sid }} .circle-drop-cell.active-drop .circle-drop-label { color: rgba(255,255,255,.55); }
+                .circle-{{ sid }} .circle-drop-tag { display: inline-block; font-size: 8px; letter-spacing: .14em; text-transform: uppercase; padding: 3px 10px; border-radius: 99px; background: rgba(255,255,255,.14); color: rgba(255,255,255,.8); }
+                .circle-{{ sid }} .circle-drop-cell:not(.active-drop) .circle-drop-tag { background: {{ section.settings.bg_color | default: '#f0efeb' }}; color: {{ section.settings.muted_color }}; }
 
-              /* ── NAV ── */
-              .circle-{{ sid }} .circle-nav { display: flex; justify-content: flex-end; align-items: center; gap: 16px; padding-top: 25px; }
-              .circle-{{ sid }} .circle-logo { font-family: "Cormorant Garamond", serif; font-weight: 300; font-size: 13px; letter-spacing: .4em; text-transform: uppercase; color: {{ section.settings.muted_color }}; margin-right: auto; }
-              .circle-{{ sid }} .circle-nav-right { display: flex; align-items: center; gap: 16px; }
-              .circle-{{ sid }} .circle-member-pill { font-size: 9px; letter-spacing: .18em; text-transform: uppercase; color: {{ section.settings.accent_color }}; border: 0.5px solid rgba(26,58,42,0.28); padding: 5px 14px; border-radius: 99px; }
-              .circle-{{ sid }} .circle-signout { font-size: 9px; letter-spacing: .14em; text-transform: uppercase; color: {{ section.settings.muted_color }}; text-decoration: none; transition: color .15s; }
-              .circle-{{ sid }} .circle-signout:hover { color: {{ section.settings.text_color }}; }
+                /* ── CARDS ── */
+                .circle-{{ sid }} .circle-card { margin-bottom: 18px;}
+                .circle-{{ sid }} .circle-login-card { background: {{ section.settings.card_color }}; border: 0.5px solid {{ section.settings.border_color }}; border-radius: 12px; padding: 22px; margin-bottom: 18px; }
+                .circle-{{ sid }} .circle-login-card { text-align: center; max-width: 560px; margin: 60px auto; }
+                .circle-{{ sid }} .circle-login-card p { font-size: 12px; line-height: 1.8; color: {{ section.settings.body_color }}; margin: 14px auto 22px; max-width: 420px; }
+                .circle-{{ sid }} .circle-card-label { font-size: 9px; letter-spacing: .22em; text-transform: uppercase; color: {{ section.settings.muted_color }}; margin-bottom: 16px; }
+                .circle-{{ sid }} .circle-login-eyebrow { font-size: 9px; letter-spacing: .24em; text-transform: uppercase; color: {{ section.settings.accent_color }}; margin-bottom: 10px; }
 
-              /* ── HERO ── */
-              .circle-{{ sid }} .circle-hero { padding: 8px 0 48px; border-bottom: 0.5px solid {{ section.settings.border_color }}; margin-bottom: 40px; }
-              .circle-{{ sid }} .circle-live-line { display: flex; align-items: center; gap: 8px; font-size: 9px; letter-spacing: .26em; text-transform: uppercase; color: {{ section.settings.accent_color }}; margin-bottom: 20px; }
-              .circle-{{ sid }} .circle-live-dot { width: 6px; height: 6px; border-radius: 50%; background: {{ section.settings.accent_color }}; animation: circlePulse-{{ sid }} 2.2s ease-in-out infinite; flex-shrink: 0; }
-              @keyframes circlePulse-{{ sid }} { 0%,100%{opacity:1;} 50%{opacity:.2;} }
-              .circle-{{ sid }} h1 { font-family: "Cormorant Garamond", serif; font-weight: 300; font-size: clamp(40px,9vw,52px); line-height: 1.06; letter-spacing: .015em; margin: 0 0 18px; }
-              .circle-{{ sid }} h1 em { color: {{ section.settings.accent_color }}; font-style: italic; }
-              .circle-{{ sid }} .circle-hero-sub { font-size: 12px; color: {{ section.settings.muted_color }}; letter-spacing: .03em; line-height: 1.85; padding-left: 16px; border-left: 1.5px solid {{ section.settings.accent_color }}; }
-              .circle-{{ sid }} .circle-hero-sub span { color: {{ section.settings.accent_color }}; }
+                /* ── CODE GATE ── */
+                .circle-{{ sid }} .circle-code-card { padding: 40px 32px; }
+                .circle-{{ sid }} .circle-gate-email { font-size: 10px; letter-spacing: .1em; color: {{ section.settings.muted_color }}; margin: -10px auto 20px; }
+                .circle-{{ sid }} .circle-gate-email span { color: {{ section.settings.accent_color }}; }
+                .circle-{{ sid }} .circle-code-input-wrap { display: flex; flex-direction: column; gap: 10px; margin-bottom: 14px; }
+                .circle-{{ sid }} .circle-code-input { width: 100%; border: 0.5px solid {{ section.settings.border_color }}; background: {{ section.settings.soft_color }}; color: {{ section.settings.text_color }}; border-radius: 999px; padding: 14px 20px; font: inherit; font-size: 14px; letter-spacing: .12em; text-align: center; text-transform: uppercase; outline: none; transition: border-color .15s; }
+                .circle-{{ sid }} .circle-code-input:focus { border-color: {{ section.settings.accent_color }}; }
+                .circle-{{ sid }} .circle-code-input.error { border-color: {{ section.settings.warning_color }}; animation: circleShake-{{ sid }} .35s ease; }
+                @keyframes circleShake-{{ sid }} { 0%,100%{transform:translateX(0)} 20%{transform:translateX(-6px)} 40%{transform:translateX(6px)} 60%{transform:translateX(-4px)} 80%{transform:translateX(4px)} }
+                .circle-{{ sid }} .circle-code-error { font-size: 11px; color: {{ section.settings.warning_color }}; margin-bottom: 16px; line-height: 1.5; }
+                .circle-{{ sid }} .circle-code-hint { font-size: 10px; color: {{ section.settings.muted_color }}; margin: 0 auto 20px; line-height: 1.6; }
+                .circle-{{ sid }} .circle-gate-waitlist { max-width: 400px; margin: 0 auto; }
 
-              /* ── DROP STRIP ── */
-              /* Hide Phase 2 when Phase 1 is active and Phase 3 is disabled */
-      .circle-{{ sid }}[data-active-phase="1"] .circle-drop-strip .phase-2 {
-        display: none;
-      }
+                /* ── SLIDER ── */
+                .circle-{{ sid }} .circle-slider-wrapper { position: relative; display: flex; align-items: center; gap: 8px; width: 100%; }
+                .circle-{{ sid }} .circle-slider-viewport { overflow: hidden; width: 100%; flex: 1; }
+                .circle-{{ sid }} .circle-slider-track { display: flex; gap: 10px; transition: transform .38s cubic-bezier(.25,1,.5,1); will-change: transform; margin-bottom: 10px; }
+                .circle-{{ sid }} .circle-arrow { flex-shrink: 0; width: 32px; height: 32px; border-radius: 50%; color: {{ section.settings.text_color }}; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all .18s ease; padding: 0; z-index: 2; }
+                .circle-{{ sid }} .circle-arrow:hover:not(:disabled) { border-color: {{ section.settings.accent_color }}; color: {{ section.settings.accent_color }}; }
+                .circle-{{ sid }} .circle-arrow:disabled { opacity: .25; cursor: not-allowed; }
+                .circle-{{ sid }} .circle-slider-dots { display: flex; justify-content: center; gap: 6px; margin-top: 14px; }
+                .circle-{{ sid }} .circle-slider-dot { width: 5px; height: 5px; border-radius: 50%; background: {{ section.settings.border_color }}; cursor: pointer; border: none; padding: 0; transition: all .2s ease; }
+                .circle-{{ sid }} .circle-slider-dot.active { background: {{ section.settings.accent_color }}; width: 16px; border-radius: 3px; }
 
-      /* Adjust grid columns for Phase 1 only when Phase 3 is disabled */
-      .circle-{{ sid }}[data-active-phase="1"]:not([data-has-phase-3="true"]) .circle-drop-strip {
-        grid-template-columns: 1fr 1fr !important;
-      }
-              .circle-{{ sid }} .circle-drop-strip { display: grid; grid-template-columns: repeat(3,1fr); gap: 1px; background: {{ section.settings.border_color }}; border-radius: 14px; overflow: hidden; margin-bottom: 36px; }
-              .circle-{{ sid }} .circle-drop-cell { background: {{ section.settings.card_color }}; padding: 22px 16px 20px; text-align: center; transition: background .15s; }
-              .circle-{{ sid }} .circle-drop-cell.active-drop { background: {{ section.settings.accent_color }}; }
-              .circle-{{ sid }} .circle-drop-cell.locked { background: #f4f3f0; }
-              .circle-{{ sid }} .circle-drop-cell.public-release { background: #e8e5e0; padding: 28px 16px; }
-              .circle-{{ sid }} .circle-drop-cell.public-release .circle-drop-num { color: #999; }
-              .circle-{{ sid }} .circle-drop-cell.public-release .circle-drop-price { color: #555; font-size: 32px; }
-              .circle-{{ sid }} .circle-drop-cell.public-release .circle-drop-label { color: #888; }
-              .circle-{{ sid }} .circle-drop-cell.public-release .circle-drop-tag { background: #ddd; color: #999; }
-              .circle-{{ sid }} .circle-drop-ships {
-                color: #fff;
-                font-family: "Cormorant Garamond", serif; 
-                font-size: 16px;
-                font-weight: bold;}
-                .circle-drop-ships_phase_3{
-                  color: #0e0e0d;
-                  font-family: "Cormorant Garamond", serif; 
-                font-size: 16px;
-                font-weight: bold;
+                /* ── PRODUCT CARDS ── */
+                .circle-{{ sid }} .circle-prod { flex: 0 0 calc(25% - 8px); width: calc(25% - 8px); border: 1px solid transparent; border-radius: 10px; overflow: hidden; background: {{ section.settings.card_color }}; cursor: pointer; transition: all .18s ease; position: relative; }
+                .circle-{{ sid }} .circle-prod:hover:not(.sold) { border-color: {{ section.settings.border_color }}; }
+                .circle-{{ sid }} .circle-prod.active { border-color: {{ section.settings.accent_color }}; background: #fff; box-shadow: 0 2px 16px rgba(26,58,42,.08); }
+                .circle-{{ sid }} .circle-prod.sold { opacity: .38; cursor: default; }
+                .circle-{{ sid }} .circle-prod-img { width: 100%; aspect-ratio: 1 / 1; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
+                .circle-{{ sid }} .circle-prod-img img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .3s ease; }
+                .circle-{{ sid }} .circle-prod:hover:not(.sold) .circle-prod-img img { transform: scale(1.03); }
+                .circle-{{ sid }} .circle-prod-dot { position: absolute; top: 8px; right: 8px; z-index: 2; width: 6px; height: 6px; border-radius: 50%; background: {{ section.settings.border_color }}; transition: background .15s; }
+                .circle-{{ sid }} .circle-prod.active .circle-prod-dot { background: {{ section.settings.accent_color }}; }
+                .circle-{{ sid }} .circle-prod-icon { font-size: 28px; opacity: .25; }
+                .circle-{{ sid }} .circle-prod-info { padding: 10px 0 10px 10px; }
+                              .circle-{{ sid }} .circle-prod-pricing { display: flex; gap: 6px; align-items: center; }
+                .circle-{{ sid }} .circle-prod-pricing span { font-size: 12px; color: {{ section.settings.accent_color }}; }
+                .circle-{{ sid }} .circle-prod-pricing s { font-size: 10px; color: {{ section.settings.muted_color }}; }
+                .circle-{{ sid }} .circle-prod-status { font-size: 8px; letter-spacing: .1em; text-transform: uppercase; color: {{ section.settings.muted_color }}; margin-top: 3px; }
+                .circle-{{ sid }} .circle-prod.active .circle-prod-status { color: {{ section.settings.accent_color }}; }
+                .circle-{{ sid }} .circle-prod-status.sold-label { color: {{ section.settings.warning_color }}; }
+
+                /* ── VARIANT OPTIONS ── */
+                .circle-{{ sid }} .circle-inline-options-container { margin-bottom: 18px; }
+                .circle-{{ sid }} .circle-inline-options-container:empty { display: none; }
+                .circle-{{ sid }} .circle-options-inner { padding: 22px; }
+                .circle-{{ sid }} .circle-options-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 18px; }
+                .circle-{{ sid }} .circle-options-product-title { font-family: "Cormorant Garamond", serif; font-size: 18px; color: {{ section.settings.text_color }}; }
+                .circle-{{ sid }} .circle-size-guide-link { font-size: 9px; letter-spacing: .1em; text-transform: uppercase; color: {{ section.settings.muted_color }}; cursor: pointer; border-bottom: 0.5px solid {{ section.settings.muted_color }}; background: none; border-top: none; border-left: none; border-right: none; font-family: inherit; padding: 0; transition: color .15s; }
+                .circle-{{ sid }} .circle-size-guide-link:hover { color: {{ section.settings.accent_color }}; border-bottom-color: {{ section.settings.accent_color }}; }
+                .circle-{{ sid }} .circle-option-group { margin-bottom: 18px; }
+                .circle-{{ sid }} .circle-option-group-label { font-size: 9px; letter-spacing: .2em; text-transform: uppercase; color: {{ section.settings.muted_color }}; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+                .circle-{{ sid }} .circle-option-group-label strong { color: {{ section.settings.accent_color }}; font-size: 10px; }
+                .circle-{{ sid }} .circle-option-values { display: flex; gap: 8px; flex-wrap: wrap; }
+                .circle-{{ sid }} .circle-sz { width: 50px; height: 50px; border: 0.5px solid {{ section.settings.border_color }}; border-radius: 10px; font-family: inherit; font-size: 12px; cursor: pointer; background: {{ section.settings.card_color }}; color: {{ section.settings.text_color }}; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 4px; transition: all .14s; }
+                .circle-{{ sid }} .circle-sz:hover:not(.sold-out) { border-color: {{ section.settings.muted_color }}; }
+                .circle-{{ sid }} .circle-sz.active { border: 1.5px solid {{ section.settings.accent_color }}; background: #eaf2ed; color: {{ section.settings.accent_color }}; }
+                .circle-{{ sid }} .circle-sz.sold-out { color: {{ section.settings.border_color }}; cursor: default; text-decoration: line-through; background: transparent; }
+                .circle-{{ sid }} .circle-sz.last-unit { border-color: {{ section.settings.warning_color }}; }
+                .circle-{{ sid }} .circle-sz-dot { width: 4px; height: 4px; border-radius: 50%; }
+                .circle-{{ sid }} .circle-sz.active .circle-sz-dot { background: {{ section.settings.accent_color }}; }
+                .circle-{{ sid }} .circle-sz.last-unit .circle-sz-dot { background: {{ section.settings.warning_color }}; }
+                .circle-{{ sid }} .circle-sz.sold-out .circle-sz-dot { background: {{ section.settings.border_color }}; }
+                .circle-{{ sid }} .circle-option-value-btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; min-width: 44px; height: 44px; padding: 0 16px; border: 0.5px solid {{ section.settings.border_color }}; border-radius: 8px; background: {{ section.settings.card_color }}; color: {{ section.settings.text_color }}; font: inherit; font-size: 11px; cursor: pointer; transition: all .15s ease; }
+                .circle-{{ sid }} .circle-option-value-btn:hover:not(.sold-out):not(.active) { border-color: {{ section.settings.muted_color }}; }
+                .circle-{{ sid }} .circle-option-value-btn.active { border: 1.5px solid {{ section.settings.accent_color }}; background: #eaf2ed; color: {{ section.settings.accent_color }}; font-weight: bold; }
+                .circle-{{ sid }} .circle-option-value-btn.sold-out { opacity: .32; text-decoration: line-through; cursor: not-allowed; }
+                .circle-{{ sid }} .circle-option-value-btn.last-unit { border-color: {{ section.settings.warning_color }}; }
+                .circle-{{ sid }} .circle-option-dot { width: 4px; height: 4px; border-radius: 50%; background: {{ section.settings.border_color }}; display: inline-block; }
+                .circle-{{ sid }} .circle-option-value-btn.active .circle-option-dot { background: {{ section.settings.accent_color }}; }
+                .circle-{{ sid }} .circle-option-value-btn.last-unit .circle-option-dot { background: {{ section.settings.warning_color }}; }
+                .circle-{{ sid }} .circle-option-value-btn.sold-out .circle-option-dot { background: {{ section.settings.muted_color }}; }
+                .circle-{{ sid }} .circle-option-value-btn.is-color { width: 44px; padding: 0; }
+                .circle-{{ sid }} .circle-color-swatch { width: 28px; height: 28px; border-radius: 50%; border: 2px solid rgba(0,0,0,.08); display: inline-block; }
+                .circle-{{ sid }} .circle-option-value-btn.active .circle-color-swatch { box-shadow: 0 0 0 2px {{ section.settings.accent_color }}; }
+                .circle-{{ sid }} .circle-size-legend { display: flex; gap: 16px; margin-top: 14px; flex-wrap: wrap; font-size: 9px; letter-spacing: .08em; color: {{ section.settings.muted_color }}; }
+                .circle-{{ sid }} .circle-size-legend span { display: flex; align-items: center; gap: 5px; }
+                .circle-{{ sid }} .circle-legend-dot { width: 5px; height: 5px; border-radius: 50%; display: inline-block; }
+                .circle-{{ sid }} .circle-legend-dot.selected { background: {{ section.settings.accent_color }}; }
+                .circle-{{ sid }} .circle-legend-dot.last-unit { background: {{ section.settings.warning_color }}; }
+                .circle-{{ sid }} .circle-legend-dot.sold-out { background: {{ section.settings.border_color }}; }
+
+                /* ── ACTION BLOCK (Reserve card) ── */
+                .circle-{{ sid }} .circle-action-block { background: #fff; border-radius: 16px; padding: 28px 28px 24px; margin-bottom: 18px; box-shadow: 0 1px 0 {{ section.settings.border_color }}, 0 4px 24px rgba(0,0,0,.04); }
+                .circle-{{ sid }} .circle-action-eyebrow { font-size: 9px; letter-spacing: .22em; text-transform: uppercase; color: {{ section.settings.muted_color }}; margin-bottom: 10px; }
+                .circle-{{ sid }} .circle-countdown-wrap { margin-bottom: 26px; }
+                .circle-{{ sid }} .circle-countdown-label { font-size: 9px; letter-spacing: .18em; text-transform: uppercase; color: {{ section.settings.muted_color }}; text-align: center; margin-bottom: 12px; }
+                .circle-{{ sid }} .circle-countdown { display: flex; align-items: flex-start; justify-content: center; gap: 4px; font-size: 16px; }
+                .circle-{{ sid }} .circle-t-block { text-align: center; }
+                .circle-{{ sid }} .circle-t-num { font-family: "Cormorant Garamond", serif; font-size: 46px; font-weight: 600; color: {{ section.settings.text_color }}; min-width: 52px; display: block; line-height: 1; }
+                .circle-{{ sid }} .circle-t-lbl { font-size: 8px; letter-spacing: .2em; text-transform: uppercase; color: {{ section.settings.muted_color }}; display: block; margin-top: 5px; }
+                .circle-{{ sid }} .circle-t-sep { font-size: 28px; color: {{ section.settings.border_color }}; padding: 8px 2px 0; line-height: 1; }
+                .circle-{{ sid }} .circle-price-block { display: flex; align-items: flex-end; justify-content: space-between; padding: 20px 0; border-top: 0.5px solid {{ section.settings.border_color }}; border-bottom: 0.5px solid {{ section.settings.border_color }}; margin-bottom: 20px; }
+                .circle-{{ sid }} .circle-price-context { font-size: 9px; letter-spacing: .16em; text-transform: uppercase; color: {{ section.settings.muted_color }}; }
+                .circle-{{ sid }} .circle-price-amount { font-family: "Cormorant Garamond", serif; font-size: 48px; font-weight: 600; color: {{ section.settings.accent_color }}; line-height: 1; }
+                .circle-{{ sid }} .circle-price-future { text-align: right; }
+                .circle-{{ sid }} .circle-price-was { font-family: "Cormorant Garamond", serif; font-size: 32px; font-weight: 300; color: {{ section.settings.muted_color }}; display: block; line-height: 1; }
+                .circle-{{ sid }} .circle-selected-preview { display: flex; align-items: center; gap: 14px; background: {{ section.settings.soft_color }}; border: 0.5px solid {{ section.settings.border_color }}; border-radius: 10px; padding: 12px; margin-bottom: 20px; }
+                .circle-{{ sid }} .circle-preview-image { width: 56px; height: 56px; border-radius: 6px; overflow: hidden; flex-shrink: 0; }
+                .circle-{{ sid }} .circle-preview-image img { width: 100%; height: 100%; object-fit: cover; }
+                .circle-{{ sid }} .circle-preview-details { flex-grow: 1; overflow: hidden; }
+                .circle-{{ sid }} .circle-preview-title { font-family: "Cormorant Garamond", serif; font-size: 16px; color: {{ section.settings.text_color }}; margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+                .circle-{{ sid }} .circle-preview-variant { font-size: 9px; text-transform: uppercase; color: {{ section.settings.muted_color }}; letter-spacing: .1em; }
+                .circle-{{ sid }} .circle-preview-savings { font-style: normal; font-size: 9px; color: {{ section.settings.accent_color }}; background: rgba(26,58,42,.07); padding: 2px 7px; border-radius: 4px; margin-top: 4px; display: inline-block; }
+                .circle-{{ sid }} .circle-view-details-btn { display: inline-flex; align-items: center; gap: 5px; flex-shrink: 0; font-family: inherit; font-size: 9px; letter-spacing: .14em; text-transform: uppercase; color: {{ section.settings.muted_color }}; border: 0.5px solid {{ section.settings.border_color }}; background: none; border-radius: 999px; padding: 6px 12px; cursor: pointer; white-space: nowrap; transition: all .15s ease; }
+                .circle-{{ sid }} .circle-view-details-btn:hover { color: {{ section.settings.accent_color }}; border-color: {{ section.settings.accent_color }}; }
+                .circle-{{ sid }} .circle-scarcity { text-align: center; font-size: 10px; letter-spacing: .06em; color: {{ section.settings.warning_color }}; margin-bottom: 12px; }
+                .circle-{{ sid }} .circle-cta-btn { display: block; width: 100%; background: {{ section.settings.accent_color }}; color: #fff; border: none; border-radius: 99px; font-family: inherit; font-size: 11px; letter-spacing: .22em; text-transform: uppercase; padding: 18px 24px; cursor: pointer; margin-bottom: 12px; transition: background .18s, transform .1s; }
+                .circle-{{ sid }} .circle-cta-btn:hover { background: #2d5c42; }
+                .circle-{{ sid }} .circle-cta-btn:active { transform: scale(.99); }
+                .circle-{{ sid }} .circle-cta-btn:disabled { opacity: .45; cursor: not-allowed; }
+                .circle-{{ sid }} .circle-cta-meta { text-align: center; font-size: 9px; letter-spacing: .08em; color: #c4c1bc;
+                  display: flex;
+                  justify-content: space-around;
+                  max-width: 70%;
+                  margin: 0 auto; }
+                /* ── PHASE PROGRESS CARD ── */
+                .circle-{{ sid }} .circle-reserve-card { }
+                .circle-{{ sid }} .circle-phase-header { display: flex; justify-content: space-between; gap: 16px; align-items: flex-start; margin-bottom: 10px; }
+                .circle-{{ sid }} .circle-phase-eye { font-size: 9px; letter-spacing: .2em; text-transform: uppercase; color: {{ section.settings.muted_color }}; margin-bottom: 4px; }
+                .circle-{{ sid }} .circle-phase-title { font-family: "Cormorant Garamond", serif; font-size: 24px; color: {{ section.settings.text_color }}; }
+                .circle-{{ sid }} .circle-badge { background: {{ section.settings.accent_color }}; color: #fff; font-family: "Cormorant Garamond", serif; font-size: 13px; font-weight: 600; padding: 7px 14px; border-radius: 999px; white-space: nowrap; }
+                .circle-{{ sid }} .circle-progress-row { display: flex; justify-content: space-between; font-size: 10px; color: {{ section.settings.muted_color }}; margin-bottom: 6px; }
+                .circle-{{ sid }} .circle-progress { height: 2px; background: {{ section.settings.border_color }}; border-radius: 99px; margin-bottom: 16px; overflow: hidden; }
+                .circle-{{ sid }} .circle-progress span { display: block; height: 100%; background: {{ section.settings.accent_color }}; }
+                .circle-{{ sid }} .circle-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+                .circle-{{ sid }} .circle-stats div { background: {{ section.settings.soft_color }}; border-radius: 8px; padding: 14px; text-align: center; }
+                .circle-{{ sid }} .circle-stats strong { display: block; font-family: "Cormorant Garamond", serif; font-size: 30px; line-height: 1; }
+                .circle-{{ sid }} .circle-stats span { display: block; font-size: 9px; letter-spacing: .18em; text-transform: uppercase; color: {{ section.settings.muted_color }}; margin-top: 5px; }
+
+                /* ── LOCKED / NEXT DROP ROW ── */
+                .circle-{{ sid }} .circle-locked-row { display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; padding: 20px 0; border-bottom: 0.5px solid {{ section.settings.border_color }}; margin-bottom: 28px; }
+                .circle-{{ sid }} .circle-locked-eyebrow { font-size: 8px; letter-spacing: .2em; text-transform: uppercase; color: {{ section.settings.muted_color }}; margin-bottom: 5px; }
+                .circle-{{ sid }} .circle-locked-title { font-family: "Cormorant Garamond", serif; font-size: 20px; font-weight: 300; color: {{ section.settings.muted_color }}; }
+                .circle-{{ sid }} .circle-locked-right { display: flex; flex-direction: column; align-items: flex-end; gap: 10px; flex-shrink: 0; }
+                .circle-{{ sid }} .circle-locked-price { font-family: "Cormorant Garamond", serif; font-size: 20px; font-weight: 300; color: {{ section.settings.muted_color }}; white-space: nowrap; display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
+                .circle-{{ sid }} .circle-locked-badge { font-family: "DM Mono", monospace; font-size: 8px; letter-spacing: .14em; text-transform: uppercase; color: {{ section.settings.accent_color }}; background: rgba(26,58,42,.07); padding: 2px 7px; border-radius: 4px; font-weight: 400; }
+                .circle-{{ sid }} .circle-notify-inline { display: flex; gap: 8px; align-items: center; }
+                .circle-{{ sid }} .circle-notify-inline input { border: 0.5px solid {{ section.settings.border_color }}; background: {{ section.settings.soft_color }}; color: {{ section.settings.text_color }}; border-radius: 99px; padding: 8px 14px; font: inherit; font-size: 10px; width: 180px; outline: none; }
+                .circle-{{ sid }} .circle-notify-inline input:focus { border-color: {{ section.settings.accent_color }}; }
+                .circle-{{ sid }} .circle-notify-btn { font-size: 9px; letter-spacing: .14em; text-transform: uppercase; color: {{ section.settings.muted_color }}; background: none; border: 0.5px solid {{ section.settings.border_color }}; border-radius: 99px; padding: 8px 14px; font-family: inherit; cursor: pointer; white-space: nowrap; transition: all .15s; }
+                .circle-{{ sid }} .circle-notify-btn:hover { border-color: {{ section.settings.muted_color }}; color: {{ section.settings.text_color }}; }
+
+                /* ── SHARED BUTTONS ── */
+                .circle-{{ sid }} .circle-main-btn { display: block; width: 100%; border-radius: 999px; font-family: inherit; font-size: 11px; letter-spacing: .2em; text-transform: uppercase; padding: 16px; cursor: pointer; text-align: center; text-decoration: none; background: {{ section.settings.accent_color }}; color: #fff; border: 0; }
+                .circle-{{ sid }} .circle-ghost-btn { display: block; width: 100%; border-radius: 999px; font-family: inherit; font-size: 11px; letter-spacing: .2em; text-transform: uppercase; padding: 16px; cursor: pointer; text-align: center; background: transparent; color: {{ section.settings.muted_color }}; border: 0.5px solid {{ section.settings.border_color }}; }
+                .circle-{{ sid }} .circle-waitlist-form { display: grid; gap: 10px; }
+                .circle-{{ sid }} .circle-waitlist-form input { width: 100%; border: 0.5px solid {{ section.settings.border_color }}; background: {{ section.settings.soft_color }}; color: {{ section.settings.text_color }}; border-radius: 999px; padding: 14px 16px; font: inherit; font-size: 11px; outline: none; }
+                .circle-{{ sid }} .circle-waitlist-form input:focus { border-color: {{ section.settings.accent_color }}; }
+                .circle-{{ sid }} .circle-already-subscribed { background: {{ section.settings.soft_color }}; border: 0.5px solid {{ section.settings.border_color }}; border-radius: 10px; padding: 16px; margin-top: 12px; font-size: 12px; line-height: 1.7; }
+
+                /* ── SOCIAL ── */
+                .circle-{{ sid }} .circle-social { margin-bottom: 18px; }
+                .circle-{{ sid }} .circle-social-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+                .circle-{{ sid }} .circle-social-card { background: {{ section.settings.card_color }}; border: 0.5px solid {{ section.settings.border_color }}; border-radius: 12px; padding: 14px; }
+                .circle-{{ sid }} .circle-social-top { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+                .circle-{{ sid }} .circle-avatar { width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: "Cormorant Garamond", serif; flex-shrink: 0; }
+                .circle-{{ sid }} .circle-social-name { font-size: 13px; }
+                .circle-{{ sid }} .circle-social-name span { color: #3b82f6; }
+                .circle-{{ sid }} .circle-handle { font-size: 10px; color: {{ section.settings.muted_color }}; }
+                .circle-{{ sid }} .circle-stars { display: flex; gap: 3px; margin-bottom: 7px; }
+                .circle-{{ sid }} .circle-stars i { width: 12px; height: 12px; border-radius: 2px; background: {{ section.settings.accent_color }}; }
+                .circle-{{ sid }} .circle-quote { font-family: "Cormorant Garamond", serif; font-style: italic; font-size: 14px; color: {{ section.settings.body_color }}; line-height: 1.45; }
+                .circle-{{ sid }} .circle-empty { font-size: 12px; color: {{ section.settings.muted_color }}; line-height: 1.7; }
+
+                /* ══ MODALS ══ */
+                .circle-{{ sid }} .circle-modal-overlay { position: fixed; inset: 0; background: rgba(14,14,13,.55); z-index: 9999; display: flex; align-items: flex-end; justify-content: center; padding: 0; backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); }
+
+                .circle-{{ sid }} .circle-modal { position: relative; background: {{ section.settings.card_color | default: '#faf9f7' }}; width: 100%; max-width: 600px; max-height: 92vh; overflow-y: auto; border-radius: 20px 20px 0 0; animation: circleModalIn-{{ sid }} .28s cubic-bezier(.25,1,.5,1); }
+                @media (min-width: 600px) {
+                  .circle-{{ sid }} .circle-modal {border-radius: 16px 16px 0 0; max-height: 88vh; }
                 }
-              .circle-{{ sid }} .circle-drop-num { font-size: 8px; letter-spacing: .24em; text-transform: uppercase; color: {{ section.settings.muted_color }}; margin-bottom: 8px; }
-              .circle-{{ sid }} .circle-drop-cell.active-drop .circle-drop-num { color: rgba(255,255,255,.45); }
-              .circle-{{ sid }} .circle-drop-cell.locked .circle-drop-num { color: #9a9792; }
-              .circle-{{ sid }} .circle-drop-price { font-family: "Cormorant Garamond", serif!important; font-size: 22px; font-weight: 600; line-height: 1; margin-bottom: 4px; color: {{ section.settings.text_color }}; }
-              .circle-{{ sid }} .circle-drop-cell.active-drop .circle-drop-price { color: rgba(255,255,255,0.7); margin-top: 12px; }
-              .circle-{{ sid }} .circle-drop-cell.locked .circle-drop-price { color: #141010; }
-              .circle-{{ sid }} .circle-drop-label { font-size: 9px; letter-spacing: .12em; text-transform: uppercase; color: #9a9792; margin-bottom: 10px; margin-top: 5px;}
-              .circle-{{ sid }} .circle-drop-cell.active-drop .circle-drop-label { color: rgba(255,255,255,.55); }
-              .circle-{{ sid }} .circle-drop-tag { display: inline-block; font-size: 8px; letter-spacing: .14em; text-transform: uppercase; padding: 3px 10px; border-radius: 99px; background: rgba(255,255,255,.14); color: rgba(255,255,255,.8); }
-              .circle-{{ sid }} .circle-drop-cell:not(.active-drop) .circle-drop-tag { background: {{ section.settings.bg_color | default: '#f0efeb' }}; color: {{ section.settings.muted_color }}; }
+                @keyframes circleModalIn-{{ sid }} { from { transform: translateY(40px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+                {% comment %} .circle-{{ sid }} .circle-modal-close { position: absolute; top: 16px; right: 16px; z-index: 10; width: 32px; height: 32px; border-radius: 50%; border: 0.5px solid {{ section.settings.border_color }}; background: {{ section.settings.soft_color | default: '#f0efeb' }}; color: {{ section.settings.muted_color }}; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all .15s; } {% endcomment %}
+                 .circle-{{ sid }} .circle-modal-close {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      color: var(--ink);
+      line-height: 1;
+      z-index: 10;
+  }
+                {% comment %} .circle-{{ sid }} .circle-modal-close:hover { background: {{ section.settings.border_color }}; color: {{ section.settings.text_color }}; } {% endcomment %}
+                .circle-{{ sid }} .circle-modal-gallery { position: relative; width: 100%; aspect-ratio: 1 / 1; overflow: hidden; border-radius: 20px 20px 0 0; }
+                @media (min-width: 600px) {
+                  .circle-{{ sid }} .circle-modal-gallery { border-radius: 16px 16px 0 0; }
 
-              /* ── CARDS ── */
-              .circle-{{ sid }} .circle-card { margin-bottom: 18px;}
-              .circle-{{ sid }} .circle-login-card { background: {{ section.settings.card_color }}; border: 0.5px solid {{ section.settings.border_color }}; border-radius: 12px; padding: 22px; margin-bottom: 18px; }
-              .circle-{{ sid }} .circle-login-card { text-align: center; max-width: 560px; margin: 60px auto; }
-              .circle-{{ sid }} .circle-login-card p { font-size: 12px; line-height: 1.8; color: {{ section.settings.body_color }}; margin: 14px auto 22px; max-width: 420px; }
-              .circle-{{ sid }} .circle-card-label { font-size: 9px; letter-spacing: .22em; text-transform: uppercase; color: {{ section.settings.muted_color }}; margin-bottom: 16px; }
-              .circle-{{ sid }} .circle-login-eyebrow { font-size: 9px; letter-spacing: .24em; text-transform: uppercase; color: {{ section.settings.accent_color }}; margin-bottom: 10px; }
+                }
+                @media (min-width: 500px) {
+                  span.inner_circle {
+                      display: flex;
+                      align-items: end;
+                  }
+                }
+                @media (max-width: 500px) {
+                  span.inner_circle {
+                    display: none;
+                  }
+                }
+                .circle-{{ sid }} .circle-modal-img-track { display: flex; height: 100%; transition: transform .35s cubic-bezier(.25,1,.5,1); }
+                .circle-{{ sid }} .circle-modal-img-track img { flex: 0 0 100%; width: 100%; height: 100%; object-fit: contain; display: block; }
+                .circle-{{ sid }} .circle-modal-img-prev,
+                .circle-{{ sid }} .circle-modal-img-next {  position: absolute; top: 50%; transform: translateY(-50%); width: 36px; height: 36px; border-radius: 50%; color: gray; cursor: pointer; display: flex; align-items: center; justify-content: center; z-index: 3; transition: all .15s; }
+                .circle-{{ sid }} .circle-modal-img-prev { left: 12px; }
+                .circle-{{ sid }} .circle-modal-img-next { right: 12px; }
+                .circle-{{ sid }} .circle-modal-img-prev:hover,
+                .circle-{{ sid }} .circle-modal-img-next:hover { background: #fff; }
+                .circle-{{ sid }} .circle-modal-img-dots { position: absolute; bottom: 12px; left: 50%; transform: translateX(-50%); display: flex; gap: 5px; }
+                .circle-{{ sid }} .circle-modal-img-dot { width: 5px; height: 5px; border-radius: 50%; background: rgba(255,255,255,.5); border: none; cursor: pointer; padding: 0; transition: all .2s; }
+                .circle-{{ sid }} .circle-modal-img-dot.active { background: #fff; width: 14px; border-radius: 3px; }
+                .circle-{{ sid }} .circle-modal-body { padding: 22px 24px 28px; }
 
-              /* ── CODE GATE ── */
-              .circle-{{ sid }} .circle-code-card { padding: 40px 32px; }
-              .circle-{{ sid }} .circle-gate-email { font-size: 10px; letter-spacing: .1em; color: {{ section.settings.muted_color }}; margin: -10px auto 20px; }
-              .circle-{{ sid }} .circle-gate-email span { color: {{ section.settings.accent_color }}; }
-              .circle-{{ sid }} .circle-code-input-wrap { display: flex; flex-direction: column; gap: 10px; margin-bottom: 14px; }
-              .circle-{{ sid }} .circle-code-input { width: 100%; border: 0.5px solid {{ section.settings.border_color }}; background: {{ section.settings.soft_color }}; color: {{ section.settings.text_color }}; border-radius: 999px; padding: 14px 20px; font: inherit; font-size: 14px; letter-spacing: .12em; text-align: center; text-transform: uppercase; outline: none; transition: border-color .15s; }
-              .circle-{{ sid }} .circle-code-input:focus { border-color: {{ section.settings.accent_color }}; }
-              .circle-{{ sid }} .circle-code-input.error { border-color: {{ section.settings.warning_color }}; animation: circleShake-{{ sid }} .35s ease; }
-              @keyframes circleShake-{{ sid }} { 0%,100%{transform:translateX(0)} 20%{transform:translateX(-6px)} 40%{transform:translateX(6px)} 60%{transform:translateX(-4px)} 80%{transform:translateX(4px)} }
-              .circle-{{ sid }} .circle-code-error { font-size: 11px; color: {{ section.settings.warning_color }}; margin-bottom: 16px; line-height: 1.5; }
-              .circle-{{ sid }} .circle-code-hint { font-size: 10px; color: {{ section.settings.muted_color }}; margin: 0 auto 20px; line-height: 1.6; }
-              .circle-{{ sid }} .circle-gate-waitlist { max-width: 400px; margin: 0 auto; }
+                /* ── NEW MODAL STYLES ── */
+                .modal-exclusive {
+                  font-size: 9px;
+                  letter-spacing: 0.26em;
+                  text-transform: uppercase;
+                  color: var(--forest);
+                  display: flex;
+                  align-items: center;
+                  gap: 8px;
+                  margin-bottom: 16px;
+                }
 
-              /* ── SLIDER ── */
-              .circle-{{ sid }} .circle-slider-wrapper { position: relative; display: flex; align-items: center; gap: 8px; width: 100%; }
-              .circle-{{ sid }} .circle-slider-viewport { overflow: hidden; width: 100%; flex: 1; }
-              .circle-{{ sid }} .circle-slider-track { display: flex; gap: 10px; transition: transform .38s cubic-bezier(.25,1,.5,1); will-change: transform; margin-bottom: 10px; }
-              .circle-{{ sid }} .circle-arrow { flex-shrink: 0; width: 32px; height: 32px; border-radius: 50%; border: 0.5px solid {{ section.settings.border_color }}; background: {{ section.settings.card_color }}; color: {{ section.settings.text_color }}; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all .18s ease; padding: 0; z-index: 2; }
-              .circle-{{ sid }} .circle-arrow:hover:not(:disabled) { border-color: {{ section.settings.accent_color }}; color: {{ section.settings.accent_color }}; }
-              .circle-{{ sid }} .circle-arrow:disabled { opacity: .25; cursor: not-allowed; }
-              .circle-{{ sid }} .circle-slider-dots { display: flex; justify-content: center; gap: 6px; margin-top: 14px; }
-              .circle-{{ sid }} .circle-slider-dot { width: 5px; height: 5px; border-radius: 50%; background: {{ section.settings.border_color }}; cursor: pointer; border: none; padding: 0; transition: all .2s ease; }
-              .circle-{{ sid }} .circle-slider-dot.active { background: {{ section.settings.accent_color }}; width: 16px; border-radius: 3px; }
+                .modal-exclusive-dot {
+                  width: 5px;
+                  height: 5px;
+                  border-radius: 50%;
+                  background: var(--forest);
+                  flex-shrink: 0;
+                }
 
-              /* ── PRODUCT CARDS ── */
-              .circle-{{ sid }} .circle-prod { flex: 0 0 calc(25% - 8px); width: calc(25% - 8px); border: 1px solid transparent; border-radius: 10px; overflow: hidden; background: {{ section.settings.card_color }}; cursor: pointer; transition: all .18s ease; position: relative; }
-              .circle-{{ sid }} .circle-prod:hover:not(.sold) { border-color: {{ section.settings.border_color }}; }
-              .circle-{{ sid }} .circle-prod.active { border-color: {{ section.settings.accent_color }}; background: #fff; box-shadow: 0 2px 16px rgba(26,58,42,.08); }
-              .circle-{{ sid }} .circle-prod.sold { opacity: .38; cursor: default; }
-              .circle-{{ sid }} .circle-prod-img { width: 100%; aspect-ratio: 1 / 1; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
-              .circle-{{ sid }} .circle-prod-img img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .3s ease; }
-              .circle-{{ sid }} .circle-prod:hover:not(.sold) .circle-prod-img img { transform: scale(1.03); }
-              .circle-{{ sid }} .circle-prod-dot { position: absolute; top: 8px; right: 8px; z-index: 2; width: 6px; height: 6px; border-radius: 50%; background: {{ section.settings.border_color }}; transition: background .15s; }
-              .circle-{{ sid }} .circle-prod.active .circle-prod-dot { background: {{ section.settings.accent_color }}; }
-              .circle-{{ sid }} .circle-prod-icon { font-size: 28px; opacity: .25; }
-              .circle-{{ sid }} .circle-prod-info { padding: 10px 0 10px 10px; }
-                            .circle-{{ sid }} .circle-prod-pricing { display: flex; gap: 6px; align-items: center; }
-              .circle-{{ sid }} .circle-prod-pricing span { font-size: 12px; color: {{ section.settings.accent_color }}; }
-              .circle-{{ sid }} .circle-prod-pricing s { font-size: 10px; color: {{ section.settings.muted_color }}; }
-              .circle-{{ sid }} .circle-prod-status { font-size: 8px; letter-spacing: .1em; text-transform: uppercase; color: {{ section.settings.muted_color }}; margin-top: 3px; }
-              .circle-{{ sid }} .circle-prod.active .circle-prod-status { color: {{ section.settings.accent_color }}; }
-              .circle-{{ sid }} .circle-prod-status.sold-label { color: {{ section.settings.warning_color }}; }
+                .modal-tagline {
+                  font-family: var(--serif);
+                  font-size: 26px;
+                  font-weight: 300;
+                  line-height: 1.2;
+                  color: var(--ink);
+                  margin-bottom: 20px;
+                }
 
-              /* ── VARIANT OPTIONS ── */
-              .circle-{{ sid }} .circle-inline-options-container { margin-bottom: 18px; }
-              .circle-{{ sid }} .circle-inline-options-container:empty { display: none; }
-              .circle-{{ sid }} .circle-options-inner { padding: 22px; }
-              .circle-{{ sid }} .circle-options-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 18px; }
-              .circle-{{ sid }} .circle-options-product-title { font-family: "Cormorant Garamond", serif; font-size: 18px; color: {{ section.settings.text_color }}; }
-              .circle-{{ sid }} .circle-size-guide-link { font-size: 9px; letter-spacing: .1em; text-transform: uppercase; color: {{ section.settings.muted_color }}; cursor: pointer; border-bottom: 0.5px solid {{ section.settings.muted_color }}; background: none; border-top: none; border-left: none; border-right: none; font-family: inherit; padding: 0; transition: color .15s; }
-              .circle-{{ sid }} .circle-size-guide-link:hover { color: {{ section.settings.accent_color }}; border-bottom-color: {{ section.settings.accent_color }}; }
-              .circle-{{ sid }} .circle-option-group { margin-bottom: 18px; }
-              .circle-{{ sid }} .circle-option-group-label { font-size: 9px; letter-spacing: .2em; text-transform: uppercase; color: {{ section.settings.muted_color }}; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
-              .circle-{{ sid }} .circle-option-group-label strong { color: {{ section.settings.accent_color }}; font-size: 10px; }
-              .circle-{{ sid }} .circle-option-values { display: flex; gap: 8px; flex-wrap: wrap; }
-              .circle-{{ sid }} .circle-sz { width: 50px; height: 50px; border: 0.5px solid {{ section.settings.border_color }}; border-radius: 10px; font-family: inherit; font-size: 12px; cursor: pointer; background: {{ section.settings.card_color }}; color: {{ section.settings.text_color }}; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 4px; transition: all .14s; }
-              .circle-{{ sid }} .circle-sz:hover:not(.sold-out) { border-color: {{ section.settings.muted_color }}; }
-              .circle-{{ sid }} .circle-sz.active { border: 1.5px solid {{ section.settings.accent_color }}; background: #eaf2ed; color: {{ section.settings.accent_color }}; }
-              .circle-{{ sid }} .circle-sz.sold-out { color: {{ section.settings.border_color }}; cursor: default; text-decoration: line-through; background: transparent; }
-              .circle-{{ sid }} .circle-sz.last-unit { border-color: {{ section.settings.warning_color }}; }
-              .circle-{{ sid }} .circle-sz-dot { width: 4px; height: 4px; border-radius: 50%; }
-              .circle-{{ sid }} .circle-sz.active .circle-sz-dot { background: {{ section.settings.accent_color }}; }
-              .circle-{{ sid }} .circle-sz.last-unit .circle-sz-dot { background: {{ section.settings.warning_color }}; }
-              .circle-{{ sid }} .circle-sz.sold-out .circle-sz-dot { background: {{ section.settings.border_color }}; }
-              .circle-{{ sid }} .circle-option-value-btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; min-width: 44px; height: 44px; padding: 0 16px; border: 0.5px solid {{ section.settings.border_color }}; border-radius: 8px; background: {{ section.settings.card_color }}; color: {{ section.settings.text_color }}; font: inherit; font-size: 11px; cursor: pointer; transition: all .15s ease; }
-              .circle-{{ sid }} .circle-option-value-btn:hover:not(.sold-out):not(.active) { border-color: {{ section.settings.muted_color }}; }
-              .circle-{{ sid }} .circle-option-value-btn.active { border: 1.5px solid {{ section.settings.accent_color }}; background: #eaf2ed; color: {{ section.settings.accent_color }}; font-weight: bold; }
-              .circle-{{ sid }} .circle-option-value-btn.sold-out { opacity: .32; text-decoration: line-through; cursor: not-allowed; }
-              .circle-{{ sid }} .circle-option-value-btn.last-unit { border-color: {{ section.settings.warning_color }}; }
-              .circle-{{ sid }} .circle-option-dot { width: 4px; height: 4px; border-radius: 50%; background: {{ section.settings.border_color }}; display: inline-block; }
-              .circle-{{ sid }} .circle-option-value-btn.active .circle-option-dot { background: {{ section.settings.accent_color }}; }
-              .circle-{{ sid }} .circle-option-value-btn.last-unit .circle-option-dot { background: {{ section.settings.warning_color }}; }
-              .circle-{{ sid }} .circle-option-value-btn.sold-out .circle-option-dot { background: {{ section.settings.muted_color }}; }
-              .circle-{{ sid }} .circle-option-value-btn.is-color { width: 44px; padding: 0; }
-              .circle-{{ sid }} .circle-color-swatch { width: 28px; height: 28px; border-radius: 50%; border: 2px solid rgba(0,0,0,.08); display: inline-block; }
-              .circle-{{ sid }} .circle-option-value-btn.active .circle-color-swatch { box-shadow: 0 0 0 2px {{ section.settings.accent_color }}; }
-              .circle-{{ sid }} .circle-size-legend { display: flex; gap: 16px; margin-top: 14px; flex-wrap: wrap; font-size: 9px; letter-spacing: .08em; color: {{ section.settings.muted_color }}; }
-              .circle-{{ sid }} .circle-size-legend span { display: flex; align-items: center; gap: 5px; }
-              .circle-{{ sid }} .circle-legend-dot { width: 5px; height: 5px; border-radius: 50%; display: inline-block; }
-              .circle-{{ sid }} .circle-legend-dot.selected { background: {{ section.settings.accent_color }}; }
-              .circle-{{ sid }} .circle-legend-dot.last-unit { background: {{ section.settings.warning_color }}; }
-              .circle-{{ sid }} .circle-legend-dot.sold-out { background: {{ section.settings.border_color }}; }
+                .modal-tagline em {
+                  color: var(--forest);
+                  font-style: italic;
+                }
 
-              /* ── ACTION BLOCK (Reserve card) ── */
-              .circle-{{ sid }} .circle-action-block { background: #fff; border-radius: 16px; padding: 28px 28px 24px; margin-bottom: 18px; box-shadow: 0 1px 0 {{ section.settings.border_color }}, 0 4px 24px rgba(0,0,0,.04); }
-              .circle-{{ sid }} .circle-action-eyebrow { font-size: 9px; letter-spacing: .22em; text-transform: uppercase; color: {{ section.settings.muted_color }}; margin-bottom: 10px; }
-              .circle-{{ sid }} .circle-countdown-wrap { margin-bottom: 26px; }
-              .circle-{{ sid }} .circle-countdown-label { font-size: 9px; letter-spacing: .18em; text-transform: uppercase; color: {{ section.settings.muted_color }}; text-align: center; margin-bottom: 12px; }
-              .circle-{{ sid }} .circle-countdown { display: flex; align-items: flex-start; justify-content: center; gap: 4px; font-size: 16px; }
-              .circle-{{ sid }} .circle-t-block { text-align: center; }
-              .circle-{{ sid }} .circle-t-num { font-family: "Cormorant Garamond", serif; font-size: 46px; font-weight: 600; color: {{ section.settings.text_color }}; min-width: 52px; display: block; line-height: 1; }
-              .circle-{{ sid }} .circle-t-lbl { font-size: 8px; letter-spacing: .2em; text-transform: uppercase; color: {{ section.settings.muted_color }}; display: block; margin-top: 5px; }
-              .circle-{{ sid }} .circle-t-sep { font-size: 28px; color: {{ section.settings.border_color }}; padding: 8px 2px 0; line-height: 1; }
-              .circle-{{ sid }} .circle-price-block { display: flex; align-items: flex-end; justify-content: space-between; padding: 20px 0; border-top: 0.5px solid {{ section.settings.border_color }}; border-bottom: 0.5px solid {{ section.settings.border_color }}; margin-bottom: 20px; }
-              .circle-{{ sid }} .circle-price-context { font-size: 9px; letter-spacing: .16em; text-transform: uppercase; color: {{ section.settings.muted_color }}; }
-              .circle-{{ sid }} .circle-price-amount { font-family: "Cormorant Garamond", serif; font-size: 48px; font-weight: 600; color: {{ section.settings.accent_color }}; line-height: 1; }
-              .circle-{{ sid }} .circle-price-future { text-align: right; }
-              .circle-{{ sid }} .circle-price-was { font-family: "Cormorant Garamond", serif; font-size: 32px; font-weight: 300; color: {{ section.settings.muted_color }}; display: block; line-height: 1; }
-              .circle-{{ sid }} .circle-selected-preview { display: flex; align-items: center; gap: 14px; background: {{ section.settings.soft_color }}; border: 0.5px solid {{ section.settings.border_color }}; border-radius: 10px; padding: 12px; margin-bottom: 20px; }
-              .circle-{{ sid }} .circle-preview-image { width: 56px; height: 56px; border-radius: 6px; overflow: hidden; flex-shrink: 0; }
-              .circle-{{ sid }} .circle-preview-image img { width: 100%; height: 100%; object-fit: cover; }
-              .circle-{{ sid }} .circle-preview-details { flex-grow: 1; overflow: hidden; }
-              .circle-{{ sid }} .circle-preview-title { font-family: "Cormorant Garamond", serif; font-size: 16px; color: {{ section.settings.text_color }}; margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-              .circle-{{ sid }} .circle-preview-variant { font-size: 9px; text-transform: uppercase; color: {{ section.settings.muted_color }}; letter-spacing: .1em; }
-              .circle-{{ sid }} .circle-preview-savings { font-style: normal; font-size: 9px; color: {{ section.settings.accent_color }}; background: rgba(26,58,42,.07); padding: 2px 7px; border-radius: 4px; margin-top: 4px; display: inline-block; }
-              .circle-{{ sid }} .circle-view-details-btn { display: inline-flex; align-items: center; gap: 5px; flex-shrink: 0; font-family: inherit; font-size: 9px; letter-spacing: .14em; text-transform: uppercase; color: {{ section.settings.muted_color }}; border: 0.5px solid {{ section.settings.border_color }}; background: none; border-radius: 999px; padding: 6px 12px; cursor: pointer; white-space: nowrap; transition: all .15s ease; }
-              .circle-{{ sid }} .circle-view-details-btn:hover { color: {{ section.settings.accent_color }}; border-color: {{ section.settings.accent_color }}; }
-              .circle-{{ sid }} .circle-scarcity { text-align: center; font-size: 10px; letter-spacing: .06em; color: {{ section.settings.warning_color }}; margin-bottom: 12px; }
-              .circle-{{ sid }} .circle-cta-btn { display: block; width: 100%; background: {{ section.settings.accent_color }}; color: #fff; border: none; border-radius: 99px; font-family: inherit; font-size: 11px; letter-spacing: .22em; text-transform: uppercase; padding: 18px 24px; cursor: pointer; margin-bottom: 12px; transition: background .18s, transform .1s; }
-              .circle-{{ sid }} .circle-cta-btn:hover { background: #2d5c42; }
-              .circle-{{ sid }} .circle-cta-btn:active { transform: scale(.99); }
-              .circle-{{ sid }} .circle-cta-btn:disabled { opacity: .45; cursor: not-allowed; }
-              .circle-{{ sid }} .circle-cta-meta { text-align: center; font-size: 9px; letter-spacing: .08em; color: #c4c1bc;
-                display: flex;
-                justify-content: space-around;
-                max-width: 70%;
-                margin: 0 auto; }
-              /* ── PHASE PROGRESS CARD ── */
-              .circle-{{ sid }} .circle-reserve-card { }
-              .circle-{{ sid }} .circle-phase-header { display: flex; justify-content: space-between; gap: 16px; align-items: flex-start; margin-bottom: 10px; }
-              .circle-{{ sid }} .circle-phase-eye { font-size: 9px; letter-spacing: .2em; text-transform: uppercase; color: {{ section.settings.muted_color }}; margin-bottom: 4px; }
-              .circle-{{ sid }} .circle-phase-title { font-family: "Cormorant Garamond", serif; font-size: 24px; color: {{ section.settings.text_color }}; }
-              .circle-{{ sid }} .circle-badge { background: {{ section.settings.accent_color }}; color: #fff; font-family: "Cormorant Garamond", serif; font-size: 13px; font-weight: 600; padding: 7px 14px; border-radius: 999px; white-space: nowrap; }
-              .circle-{{ sid }} .circle-progress-row { display: flex; justify-content: space-between; font-size: 10px; color: {{ section.settings.muted_color }}; margin-bottom: 6px; }
-              .circle-{{ sid }} .circle-progress { height: 2px; background: {{ section.settings.border_color }}; border-radius: 99px; margin-bottom: 16px; overflow: hidden; }
-              .circle-{{ sid }} .circle-progress span { display: block; height: 100%; background: {{ section.settings.accent_color }}; }
-              .circle-{{ sid }} .circle-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-              .circle-{{ sid }} .circle-stats div { background: {{ section.settings.soft_color }}; border-radius: 8px; padding: 14px; text-align: center; }
-              .circle-{{ sid }} .circle-stats strong { display: block; font-family: "Cormorant Garamond", serif; font-size: 30px; line-height: 1; }
-              .circle-{{ sid }} .circle-stats span { display: block; font-size: 9px; letter-spacing: .18em; text-transform: uppercase; color: {{ section.settings.muted_color }}; margin-top: 5px; }
+                .modal-shipping {
+                  margin-bottom: 20px;
+                }
 
-              /* ── LOCKED / NEXT DROP ROW ── */
-              .circle-{{ sid }} .circle-locked-row { display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; padding: 20px 0; border-bottom: 0.5px solid {{ section.settings.border_color }}; margin-bottom: 28px; }
-              .circle-{{ sid }} .circle-locked-eyebrow { font-size: 8px; letter-spacing: .2em; text-transform: uppercase; color: {{ section.settings.muted_color }}; margin-bottom: 5px; }
-              .circle-{{ sid }} .circle-locked-title { font-family: "Cormorant Garamond", serif; font-size: 20px; font-weight: 300; color: {{ section.settings.muted_color }}; }
-              .circle-{{ sid }} .circle-locked-right { display: flex; flex-direction: column; align-items: flex-end; gap: 10px; flex-shrink: 0; }
-              .circle-{{ sid }} .circle-locked-price { font-family: "Cormorant Garamond", serif; font-size: 20px; font-weight: 300; color: {{ section.settings.muted_color }}; white-space: nowrap; display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
-              .circle-{{ sid }} .circle-locked-badge { font-family: "DM Mono", monospace; font-size: 8px; letter-spacing: .14em; text-transform: uppercase; color: {{ section.settings.accent_color }}; background: rgba(26,58,42,.07); padding: 2px 7px; border-radius: 4px; font-weight: 400; }
-              .circle-{{ sid }} .circle-notify-inline { display: flex; gap: 8px; align-items: center; }
-              .circle-{{ sid }} .circle-notify-inline input { border: 0.5px solid {{ section.settings.border_color }}; background: {{ section.settings.soft_color }}; color: {{ section.settings.text_color }}; border-radius: 99px; padding: 8px 14px; font: inherit; font-size: 10px; width: 180px; outline: none; }
-              .circle-{{ sid }} .circle-notify-inline input:focus { border-color: {{ section.settings.accent_color }}; }
-              .circle-{{ sid }} .circle-notify-btn { font-size: 9px; letter-spacing: .14em; text-transform: uppercase; color: {{ section.settings.muted_color }}; background: none; border: 0.5px solid {{ section.settings.border_color }}; border-radius: 99px; padding: 8px 14px; font-family: inherit; cursor: pointer; white-space: nowrap; transition: all .15s; }
-              .circle-{{ sid }} .circle-notify-btn:hover { border-color: {{ section.settings.muted_color }}; color: {{ section.settings.text_color }}; }
+                .modal-shipping-text {
+                  font-family: var(--serif);
+                  font-size: 26px;
+                  font-weight: 400;
+                  color: var(--forest);
+                  line-height: 1.1;
+                }
 
-              /* ── SHARED BUTTONS ── */
-              .circle-{{ sid }} .circle-main-btn { display: block; width: 100%; border-radius: 999px; font-family: inherit; font-size: 11px; letter-spacing: .2em; text-transform: uppercase; padding: 16px; cursor: pointer; text-align: center; text-decoration: none; background: {{ section.settings.accent_color }}; color: #fff; border: 0; }
-              .circle-{{ sid }} .circle-ghost-btn { display: block; width: 100%; border-radius: 999px; font-family: inherit; font-size: 11px; letter-spacing: .2em; text-transform: uppercase; padding: 16px; cursor: pointer; text-align: center; background: transparent; color: {{ section.settings.muted_color }}; border: 0.5px solid {{ section.settings.border_color }}; }
-              .circle-{{ sid }} .circle-waitlist-form { display: grid; gap: 10px; }
-              .circle-{{ sid }} .circle-waitlist-form input { width: 100%; border: 0.5px solid {{ section.settings.border_color }}; background: {{ section.settings.soft_color }}; color: {{ section.settings.text_color }}; border-radius: 999px; padding: 14px 16px; font: inherit; font-size: 11px; outline: none; }
-              .circle-{{ sid }} .circle-waitlist-form input:focus { border-color: {{ section.settings.accent_color }}; }
-              .circle-{{ sid }} .circle-already-subscribed { background: {{ section.settings.soft_color }}; border: 0.5px solid {{ section.settings.border_color }}; border-radius: 10px; padding: 16px; margin-top: 12px; font-size: 12px; line-height: 1.7; }
+                .modal-price-row {
+                  display: flex;
+                  align-items: flex-end;
+                  justify-content: space-between;
+                  padding: 18px 0;
+                  border-top: 0.5px solid var(--stone);
+                  border-bottom: 0.5px solid var(--stone);
+                  margin-bottom: 20px;
+                }
 
-              /* ── SOCIAL ── */
-              .circle-{{ sid }} .circle-social { margin-bottom: 18px; }
-              .circle-{{ sid }} .circle-social-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-              .circle-{{ sid }} .circle-social-card { background: {{ section.settings.card_color }}; border: 0.5px solid {{ section.settings.border_color }}; border-radius: 12px; padding: 14px; }
-              .circle-{{ sid }} .circle-social-top { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
-              .circle-{{ sid }} .circle-avatar { width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: "Cormorant Garamond", serif; flex-shrink: 0; }
-              .circle-{{ sid }} .circle-social-name { font-size: 13px; }
-              .circle-{{ sid }} .circle-social-name span { color: #3b82f6; }
-              .circle-{{ sid }} .circle-handle { font-size: 10px; color: {{ section.settings.muted_color }}; }
-              .circle-{{ sid }} .circle-stars { display: flex; gap: 3px; margin-bottom: 7px; }
-              .circle-{{ sid }} .circle-stars i { width: 12px; height: 12px; border-radius: 2px; background: {{ section.settings.accent_color }}; }
-              .circle-{{ sid }} .circle-quote { font-family: "Cormorant Garamond", serif; font-style: italic; font-size: 14px; color: {{ section.settings.body_color }}; line-height: 1.45; }
-              .circle-{{ sid }} .circle-empty { font-size: 12px; color: {{ section.settings.muted_color }}; line-height: 1.7; }
+                .modal-price-label {
+                  font-size: 9px;
+                  letter-spacing: 0.16em;
+                  text-transform: uppercase;
+                  color: var(--muted);
+                  margin-bottom: 4px;
+                }
 
-              /* ══ MODALS ══ */
-              .circle-{{ sid }} .circle-modal-overlay { position: fixed; inset: 0; background: rgba(14,14,13,.55); z-index: 9999; display: flex; align-items: flex-end; justify-content: center; padding: 0; backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); }
-              
-              .circle-{{ sid }} .circle-modal { position: relative; background: {{ section.settings.card_color | default: '#faf9f7' }}; width: 100%; max-width: 600px; max-height: 92vh; overflow-y: auto; border-radius: 20px 20px 0 0; animation: circleModalIn-{{ sid }} .28s cubic-bezier(.25,1,.5,1); }
-              @media (min-width: 600px) {
-                .circle-{{ sid }} .circle-modal {border-radius: 16px 16px 0 0; max-height: 88vh; }
-              }
-              @keyframes circleModalIn-{{ sid }} { from { transform: translateY(40px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-              {% comment %} .circle-{{ sid }} .circle-modal-close { position: absolute; top: 16px; right: 16px; z-index: 10; width: 32px; height: 32px; border-radius: 50%; border: 0.5px solid {{ section.settings.border_color }}; background: {{ section.settings.soft_color | default: '#f0efeb' }}; color: {{ section.settings.muted_color }}; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all .15s; } {% endcomment %}
-               .circle-{{ sid }} .circle-modal-close {
-    position: absolute;
-    top: 14px;
-    right: 14px;
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    background: rgba(255,255,255,0.9);
+                .modal-price-circle {
+                  font-family: var(--serif);
+                  font-size: 40px;
+                  font-weight: 600;
+                  color: var(--forest);
+                  line-height: 1;
+                }
+
+                .modal-price-public {
+                  text-align: right;
+                }
+
+                .modal-price-public-amt {
+                  font-family: var(--serif);
+                  font-size: 28px;
+                  font-weight: 300;
+                  color: var(--faint);
+                  line-height: 1;
+                }
+
+                .modal-product-name {
+                  font-family: var(--serif);
+                  font-size: 17px;
+                  font-weight: 300;
+                  color: var(--muted);
+                  letter-spacing: 0.02em;
+                  margin-bottom: 24px;
+                }
+
+                .circle-{{ sid }} .circle-modal-label { font-size: 9px; letter-spacing: .2em; text-transform: uppercase; color: {{ section.settings.muted_color }}; margin-bottom: 6px; }
+                .circle-{{ sid }} .circle-modal-title { font-family: "Cormorant Garamond", serif; font-size: 28px; font-weight: 300; color: {{ section.settings.text_color }}; margin-bottom: 10px; }
+                .circle-{{ sid }} .circle-modal-price-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 16px; }
+                .circle-{{ sid }} .circle-modal-sale { font-family: "Cormorant Garamond", serif; font-size: 28px; font-weight: 600; color: {{ section.settings.accent_color }}; }
+                .circle-{{ sid }} .circle-modal-was { font-family: "Cormorant Garamond", serif; font-size: 20px; font-weight: 300; color: {{ section.settings.muted_color }}; }
+                .circle-{{ sid }} .circle-modal-save { font-style: normal; font-size: 9px; color: {{ section.settings.accent_color }}; background: rgba(26,58,42,.08); padding: 3px 8px; border-radius: 5px; }
+                .circle-{{ sid }} .circle-modal-desc { font-size: 12px; line-height: 1.8; color: var(--muted); margin-bottom: 20px; }
+                .circle-{{ sid }} .circle-modal-link { display: inline-flex; align-items: center; gap: 6px; font-size: 9px; letter-spacing: .14em; text-transform: uppercase; color: {{ section.settings.muted_color }}; text-decoration: none; border-bottom: 0.5px solid {{ section.settings.border_color }}; padding-bottom: 1px; transition: all .15s; }
+                .circle-{{ sid }} .circle-modal-link:hover { color: {{ section.settings.accent_color }}; border-bottom-color: {{ section.settings.accent_color }}; }
+                .circle-{{ sid }} .circle-size-modal { }
+                .circle-{{ sid }} .circle-size-guide-content { font-size: 12px; line-height: 1.8; color: {{ section.settings.body_color }}; }
+                .circle-{{ sid }} .circle-size-guide-content table { width: 100%; border-collapse: collapse; margin: 12px 0; }
+                .circle-{{ sid }} .circle-size-guide-content th, .circle-{{ sid }} .circle-size-guide-content td { border: 0.5px solid {{ section.settings.border_color }}; padding: 10px 12px; font-size: 11px; text-align: left; }
+                .circle-{{ sid }} .circle-size-guide-content th { background: {{ section.settings.soft_color }}; font-size: 9px; letter-spacing: .12em; text-transform: uppercase; color: {{ section.settings.muted_color }}; }
+
+                /* ── RESPONSIVE ── */
+                @media (max-width: 480px) {
+                  .circle-{{ sid }} .circle-prod { flex: 0 0 calc(50% - 5px); width: calc(50% - 5px); }
+                  .circle-{{ sid }} .circle-social-grid { grid-template-columns: 1fr; }
+                  .circle-{{ sid }} .circle-{{ sid }} .circle-login-card { padding: 18px; }
+                  .circle-{{ sid }} .circle-code-card { padding: 28px 18px; }
+                  .circle-{{ sid }} .circle-action-block { padding: 22px 20px 20px; }
+                  .circle-{{ sid }} .circle-t-num { min-width: 40px; font-size: 36px; }
+                  .circle-{{ sid }} .circle-price-amount { font-size: 38px; }
+                  .circle-{{ sid }} .circle-drop-cell.active-drop .circle-drop-price { font-size: 26px; }
+                  .circle-{{ sid }} .circle-notify-inline { width: 100%; }
+                  .circle-{{ sid }} .circle-notify-inline input { flex: 1; width: auto; }
+                  .circle-{{ sid }} .circle-selected-preview { flex-wrap: wrap; }
+                  .modal-price-circle { font-size: 32px; }
+                  .modal-price-public-amt { font-size: 22px; }
+                  .modal-tagline { font-size: 22px; }
+                  .modal-shipping-text { font-size: 22px; }
+                }
+
+
+
+                /* ── MODAL DESCRIPTION FULL ── */
+  .circle-{{ sid }} .circle-modal-desc {
+    font-size: 13px;
+    line-height: 1.8;
+    color: var(--muted);
+    margin-bottom: 20px;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    max-height: 300px;
+    overflow-y: auto;
+    padding-right: 5px;
+  }
+
+  .circle-{{ sid }} .circle-modal-desc::-webkit-scrollbar {
+    width: 3px;
+  }
+
+  .circle-{{ sid }} .circle-modal-desc::-webkit-scrollbar-track {
+    background: var(--stone);
+    border-radius: 10px;
+  }
+
+  .circle-{{ sid }} .circle-modal-desc::-webkit-scrollbar-thumb {
+    background: var(--forest);
+    border-radius: 10px;
+  }
+
+  /* ── SIZE GUIDE MODAL ── */
+  .circle-{{ sid }} .circle-size-modal .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(14,14,13,0.55);
+    z-index: 10000;
+    align-items: flex-end;
+    justify-content: center;
+    backdrop-filter: blur(2px);
+  }
+  .circle-{{ sid }} .circle-size-modal .modal-overlay.open { display: flex; }
+
+  .circle-{{ sid }} .circle-size-modal .modal {
+    background: var(--card);
+    width: 100%;
+    max-width: 580px;
+    border-radius: 20px 20px 0 0;
+    overflow: hidden;
+    max-height: 92vh;
+    overflow-y: auto;
+    animation: slideUp 0.28s cubic-bezier(0.4,0,0.2,1);
+  }
+  @keyframes slideUp { from { transform: translateY(40px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+  .circle-{{ sid }} .circle-size-modal .size-guide-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: var(--mono);
+    font-size: 11px;
+    table-layout: fixed;
+  }
+
+  .circle-{{ sid }} .circle-size-modal .size-guide-table th {
+    background: var(--ink);
+    color: #fff;
+    padding: 12px 16px;
+    text-align: center;
+    font-size: 9px;
+    letter-spacing: 0.18em;
+    font-weight: 400;
+  }
+  .circle-{{ sid }} .circle-size-modal .size-guide-table th:first-child {
+    text-align: left;
+    border-radius: 8px 0 0 0;
+  }
+  .circle-{{ sid }} .circle-size-modal .size-guide-table th:last-child {
+    border-radius: 0 8px 0 0;
+  }
+
+  .circle-{{ sid }} .circle-size-modal .size-guide-table td {
+    padding: 13px 16px;
+    text-align: center;
+    color: var(--ink);
+  }
+  .circle-{{ sid }} .circle-size-modal .size-guide-table td:first-child {
+    background: var(--ink);
+    color: rgba(255,255,255,1);
+    text-align: left;
+    font-size: 9px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    font-weight: 400;
+    white-space: nowrap;
+    width: 90px;
+  }
+  .circle-{{ sid }} .circle-size-modal .size-guide-table tr:nth-child(2) td {
+    background: #f4f3f0;
+  }
+  .circle-{{ sid }} .circle-size-modal .size-guide-table tr:nth-child(4) td:first-child {
+    border-radius: 0 0 0 8px;
+  }
+  .circle-{{ sid }} .circle-size-modal .size-guide-table tr:nth-child(4) td:last-child {
+    border-radius: 0 0 8px 0;
+  }
+
+  .circle-{{ sid }} .circle-size-modal .unit-toggle {
+    display: inline-flex;
+    background: var(--bg);
+    border: 0.5px solid var(--stone);
+    border-radius: 99px;
+    padding: 3px;
+  }
+  .circle-{{ sid }} .circle-size-modal .unit-toggle button {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    padding: 7px 20px;
+    border-radius: 99px;
     border: none;
     cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 18px;
-    color: var(--ink);
-    line-height: 1;
-    z-index: 10;
-}
-              {% comment %} .circle-{{ sid }} .circle-modal-close:hover { background: {{ section.settings.border_color }}; color: {{ section.settings.text_color }}; } {% endcomment %}
-              .circle-{{ sid }} .circle-modal-gallery { position: relative; width: 100%; aspect-ratio: 1 / 1; overflow: hidden; border-radius: 20px 20px 0 0; }
-              @media (min-width: 600px) {
-                .circle-{{ sid }} .circle-modal-gallery { border-radius: 16px 16px 0 0; }
-                
-              }
-              @media (min-width: 500px) {
-                span.inner_circle {
-                    display: flex;
-                    align-items: end;
-                }
-              }
-              @media (max-width: 500px) {
-                span.inner_circle {
-                  display: none;
-                }
-              }
-              .circle-{{ sid }} .circle-modal-img-track { display: flex; height: 100%; transition: transform .35s cubic-bezier(.25,1,.5,1); }
-              .circle-{{ sid }} .circle-modal-img-track img { flex: 0 0 100%; width: 100%; height: 100%; object-fit: contain; display: block; }
-              .circle-{{ sid }} .circle-modal-img-prev,
-              .circle-{{ sid }} .circle-modal-img-next { position: absolute; top: 50%; transform: translateY(-50%); width: 36px; height: 36px; border-radius: 50%; border: 0.5px solid rgba(255,255,255,.3); background: rgba(255,255,255,.85); color: {{ section.settings.text_color }}; cursor: pointer; display: flex; align-items: center; justify-content: center; z-index: 3; transition: all .15s; }
-              .circle-{{ sid }} .circle-modal-img-prev { left: 12px; }
-              .circle-{{ sid }} .circle-modal-img-next { right: 12px; }
-              .circle-{{ sid }} .circle-modal-img-prev:hover,
-              .circle-{{ sid }} .circle-modal-img-next:hover { background: #fff; }
-              .circle-{{ sid }} .circle-modal-img-dots { position: absolute; bottom: 12px; left: 50%; transform: translateX(-50%); display: flex; gap: 5px; }
-              .circle-{{ sid }} .circle-modal-img-dot { width: 5px; height: 5px; border-radius: 50%; background: rgba(255,255,255,.5); border: none; cursor: pointer; padding: 0; transition: all .2s; }
-              .circle-{{ sid }} .circle-modal-img-dot.active { background: #fff; width: 14px; border-radius: 3px; }
-              .circle-{{ sid }} .circle-modal-body { padding: 22px 24px 28px; }
+    transition: all 0.15s;
+  }
+  .circle-{{ sid }} .circle-size-modal .unit-toggle .active {
+    background: var(--forest);
+    color: #fff;
+  }
+  .circle-{{ sid }} .circle-size-modal .unit-toggle .inactive {
+    background: transparent;
+    color: var(--muted);
+  }
 
-              /* ── NEW MODAL STYLES ── */
-              .modal-exclusive {
-                font-size: 9px;
-                letter-spacing: 0.26em;
-                text-transform: uppercase;
-                color: var(--forest);
-                display: flex;
-                align-items: center;
-                gap: 8px;
-                margin-bottom: 16px;
-              }
+  /* ── PRODUCT STATUS TOGGLE ── */
+  .circle-{{ sid }} .prod-status-wrapper {
+    padding: 0 0 8px 10px;
+  }
 
-              .modal-exclusive-dot {
-                width: 5px;
-                height: 5px;
-                border-radius: 50%;
-                background: var(--forest);
-                flex-shrink: 0;
-              }
+  .circle-{{ sid }} .prod-status {
+    font-size: 8px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
 
-              .modal-tagline {
-                font-family: var(--serif);
-                font-size: 26px;
-                font-weight: 300;
-                line-height: 1.2;
-                color: var(--ink);
-                margin-bottom: 20px;
-              }
+  .circle-{{ sid }} .prod-status.status-active {
+    color: var(--forest);
+    cursor: pointer;
+  }
 
-              .modal-tagline em {
-                color: var(--forest);
-                font-style: italic;
-              }
+  .circle-{{ sid }} .prod-status.status-shipping {
+    color: #9a9792;
+  }
 
-              .modal-shipping {
-                margin-bottom: 20px;
-              }
+  .circle-{{ sid }} .circle-prod.active .prod-status.status-active {
+    display: block !important;
+  }
 
-              .modal-shipping-text {
-                font-family: var(--serif);
-                font-size: 26px;
-                font-weight: 400;
-                color: var(--forest);
-                line-height: 1.1;
-              }
+  .circle-{{ sid }} .circle-prod.active .prod-status.status-shipping {
+    display: none !important;
+  }
 
-              .modal-price-row {
-                display: flex;
-                align-items: flex-end;
-                justify-content: space-between;
-                padding: 18px 0;
-                border-top: 0.5px solid var(--stone);
-                border-bottom: 0.5px solid var(--stone);
-                margin-bottom: 20px;
-              }
+  .circle-{{ sid }} .circle-prod:not(.active) .prod-status.status-active {
+    display: none !important;
+  }
 
-              .modal-price-label {
-                font-size: 9px;
-                letter-spacing: 0.16em;
-                text-transform: uppercase;
-                color: var(--muted);
-                margin-bottom: 4px;
-              }
-
-              .modal-price-circle {
-                font-family: var(--serif);
-                font-size: 40px;
-                font-weight: 600;
-                color: var(--forest);
-                line-height: 1;
-              }
-
-              .modal-price-public {
-                text-align: right;
-              }
-
-              .modal-price-public-amt {
-                font-family: var(--serif);
-                font-size: 28px;
-                font-weight: 300;
-                color: var(--faint);
-                line-height: 1;
-              }
-
-              .modal-product-name {
-                font-family: var(--serif);
-                font-size: 17px;
-                font-weight: 300;
-                color: var(--muted);
-                letter-spacing: 0.02em;
-                margin-bottom: 24px;
-              }
-
-              .circle-{{ sid }} .circle-modal-label { font-size: 9px; letter-spacing: .2em; text-transform: uppercase; color: {{ section.settings.muted_color }}; margin-bottom: 6px; }
-              .circle-{{ sid }} .circle-modal-title { font-family: "Cormorant Garamond", serif; font-size: 28px; font-weight: 300; color: {{ section.settings.text_color }}; margin-bottom: 10px; }
-              .circle-{{ sid }} .circle-modal-price-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 16px; }
-              .circle-{{ sid }} .circle-modal-sale { font-family: "Cormorant Garamond", serif; font-size: 28px; font-weight: 600; color: {{ section.settings.accent_color }}; }
-              .circle-{{ sid }} .circle-modal-was { font-family: "Cormorant Garamond", serif; font-size: 20px; font-weight: 300; color: {{ section.settings.muted_color }}; }
-              .circle-{{ sid }} .circle-modal-save { font-style: normal; font-size: 9px; color: {{ section.settings.accent_color }}; background: rgba(26,58,42,.08); padding: 3px 8px; border-radius: 5px; }
-              .circle-{{ sid }} .circle-modal-desc { font-size: 12px; line-height: 1.8; color: var(--muted); margin-bottom: 20px; }
-              .circle-{{ sid }} .circle-modal-link { display: inline-flex; align-items: center; gap: 6px; font-size: 9px; letter-spacing: .14em; text-transform: uppercase; color: {{ section.settings.muted_color }}; text-decoration: none; border-bottom: 0.5px solid {{ section.settings.border_color }}; padding-bottom: 1px; transition: all .15s; }
-              .circle-{{ sid }} .circle-modal-link:hover { color: {{ section.settings.accent_color }}; border-bottom-color: {{ section.settings.accent_color }}; }
-              .circle-{{ sid }} .circle-size-modal { }
-              .circle-{{ sid }} .circle-size-guide-content { font-size: 12px; line-height: 1.8; color: {{ section.settings.body_color }}; }
-              .circle-{{ sid }} .circle-size-guide-content table { width: 100%; border-collapse: collapse; margin: 12px 0; }
-              .circle-{{ sid }} .circle-size-guide-content th, .circle-{{ sid }} .circle-size-guide-content td { border: 0.5px solid {{ section.settings.border_color }}; padding: 10px 12px; font-size: 11px; text-align: left; }
-              .circle-{{ sid }} .circle-size-guide-content th { background: {{ section.settings.soft_color }}; font-size: 9px; letter-spacing: .12em; text-transform: uppercase; color: {{ section.settings.muted_color }}; }
-
-              /* ── RESPONSIVE ── */
-              @media (max-width: 480px) {
-                .circle-{{ sid }} .circle-prod { flex: 0 0 calc(50% - 5px); width: calc(50% - 5px); }
-                .circle-{{ sid }} .circle-social-grid { grid-template-columns: 1fr; }
-                .circle-{{ sid }} .circle-{{ sid }} .circle-login-card { padding: 18px; }
-                .circle-{{ sid }} .circle-code-card { padding: 28px 18px; }
-                .circle-{{ sid }} .circle-action-block { padding: 22px 20px 20px; }
-                .circle-{{ sid }} .circle-t-num { min-width: 40px; font-size: 36px; }
-                .circle-{{ sid }} .circle-price-amount { font-size: 38px; }
-                .circle-{{ sid }} .circle-drop-cell.active-drop .circle-drop-price { font-size: 26px; }
-                .circle-{{ sid }} .circle-notify-inline { width: 100%; }
-                .circle-{{ sid }} .circle-notify-inline input { flex: 1; width: auto; }
-                .circle-{{ sid }} .circle-selected-preview { flex-wrap: wrap; }
-                .modal-price-circle { font-size: 32px; }
-                .modal-price-public-amt { font-size: 22px; }
-                .modal-tagline { font-size: 22px; }
-                .modal-shipping-text { font-size: 22px; }
-              }
-
-
-
-              /* ── MODAL DESCRIPTION FULL ── */
-.circle-{{ sid }} .circle-modal-desc {
-  font-size: 13px;
-  line-height: 1.8;
-  color: var(--muted);
-  margin-bottom: 20px;
-  white-space: pre-wrap;
-  word-wrap: break-word;
-  max-height: 300px;
-  overflow-y: auto;
-  padding-right: 5px;
-}
-
-.circle-{{ sid }} .circle-modal-desc::-webkit-scrollbar {
-  width: 3px;
-}
-
-.circle-{{ sid }} .circle-modal-desc::-webkit-scrollbar-track {
-  background: var(--stone);
-  border-radius: 10px;
-}
-
-.circle-{{ sid }} .circle-modal-desc::-webkit-scrollbar-thumb {
-  background: var(--forest);
-  border-radius: 10px;
-}
-
-/* ── SIZE GUIDE MODAL ── */
-.circle-{{ sid }} .circle-size-modal .modal-overlay {
-  display: none;
-  position: fixed;
-  inset: 0;
-  background: rgba(14,14,13,0.55);
-  z-index: 10000;
-  align-items: flex-end;
-  justify-content: center;
-  backdrop-filter: blur(2px);
-}
-.circle-{{ sid }} .circle-size-modal .modal-overlay.open { display: flex; }
-
-.circle-{{ sid }} .circle-size-modal .modal {
-  background: var(--card);
-  width: 100%;
-  max-width: 580px;
-  border-radius: 20px 20px 0 0;
-  overflow: hidden;
-  max-height: 92vh;
-  overflow-y: auto;
-  animation: slideUp 0.28s cubic-bezier(0.4,0,0.2,1);
-}
-@keyframes slideUp { from { transform: translateY(40px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-
-.circle-{{ sid }} .circle-size-modal .size-guide-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-family: var(--mono);
-  font-size: 11px;
-  table-layout: fixed;
-}
-
-.circle-{{ sid }} .circle-size-modal .size-guide-table th {
-  background: var(--ink);
-  color: #fff;
-  padding: 12px 16px;
-  text-align: center;
-  font-size: 9px;
-  letter-spacing: 0.18em;
-  font-weight: 400;
-}
-.circle-{{ sid }} .circle-size-modal .size-guide-table th:first-child {
-  text-align: left;
-  border-radius: 8px 0 0 0;
-}
-.circle-{{ sid }} .circle-size-modal .size-guide-table th:last-child {
-  border-radius: 0 8px 0 0;
-}
-
-.circle-{{ sid }} .circle-size-modal .size-guide-table td {
-  padding: 13px 16px;
-  text-align: center;
-  color: var(--ink);
-}
-.circle-{{ sid }} .circle-size-modal .size-guide-table td:first-child {
-  background: var(--ink);
-  color: rgba(255,255,255,1);
-  text-align: left;
-  font-size: 9px;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  font-weight: 400;
-  white-space: nowrap;
-  width: 90px;
-}
-.circle-{{ sid }} .circle-size-modal .size-guide-table tr:nth-child(2) td {
-  background: #f4f3f0;
-}
-.circle-{{ sid }} .circle-size-modal .size-guide-table tr:nth-child(4) td:first-child {
-  border-radius: 0 0 0 8px;
-}
-.circle-{{ sid }} .circle-size-modal .size-guide-table tr:nth-child(4) td:last-child {
-  border-radius: 0 0 8px 0;
-}
-
-.circle-{{ sid }} .circle-size-modal .unit-toggle {
-  display: inline-flex;
-  background: var(--bg);
-  border: 0.5px solid var(--stone);
-  border-radius: 99px;
-  padding: 3px;
-}
-.circle-{{ sid }} .circle-size-modal .unit-toggle button {
-  font-family: var(--mono);
-  font-size: 10px;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  padding: 7px 20px;
-  border-radius: 99px;
-  border: none;
-  cursor: pointer;
-  transition: all 0.15s;
-}
-.circle-{{ sid }} .circle-size-modal .unit-toggle .active {
-  background: var(--forest);
-  color: #fff;
-}
-.circle-{{ sid }} .circle-size-modal .unit-toggle .inactive {
-  background: transparent;
-  color: var(--muted);
-}
-
-/* ── PRODUCT STATUS TOGGLE ── */
-.circle-{{ sid }} .prod-status-wrapper {
-  padding: 0 0 8px 10px;
-}
-
-.circle-{{ sid }} .prod-status {
-  font-size: 8px;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
-.circle-{{ sid }} .prod-status.status-active {
-  color: var(--forest);
-  cursor: pointer;
-}
-
-.circle-{{ sid }} .prod-status.status-shipping {
-  color: #9a9792;
-}
-
-.circle-{{ sid }} .circle-prod.active .prod-status.status-active {
-  display: block !important;
-}
-
-.circle-{{ sid }} .circle-prod.active .prod-status.status-shipping {
-  display: none !important;
-}
-
-.circle-{{ sid }} .circle-prod:not(.active) .prod-status.status-active {
-  display: none !important;
-}
-
-.circle-{{ sid }} .circle-prod:not(.active) .prod-status.status-shipping {
-  display: block !important;
-}
+  .circle-{{ sid }} .circle-prod:not(.active) .prod-status.status-shipping {
+    display: block !important;
+  }
 </style>
 
 <script>
@@ -2577,7 +2615,7 @@
     });
 
     // ── Countdown ──────────────────────────────────────────────────────────
-    function updateCountdown() {
+    {% comment %} function updateCountdown() {
       const endMs = Number(root.dataset.activeEndMs || 0);
       if (!endMs) return;
       const diff = Math.max(0, endMs - Date.now());
@@ -2593,6 +2631,38 @@
       if (diff <= 0 && mainReserveBtn) {
         mainReserveBtn.disabled = true;
         mainReserveBtn.textContent = 'Offer ended';
+      }
+    } {% endcomment %}
+
+    // ── Countdown ──────────────────────────────────────────────────────────
+    function updateCountdown() {
+      const endMs = Number(root.dataset.activeEndMs || 0);
+      if (!endMs) return;
+      const diff = Math.max(0, endMs - Date.now());
+      const pad = n => String(n).padStart(2, '0');
+      const set = (sel, val) => {
+        const el = root.querySelector(sel);
+        if (el) el.textContent = pad(val);
+      };
+      set('[data-days]', Math.floor(diff / 86400000));
+      set('[data-hours]', Math.floor((diff % 86400000) / 3600000));
+      set('[data-minutes]', Math.floor((diff % 3600000) / 60000));
+      set('[data-seconds]', Math.floor((diff % 60000) / 1000));
+
+      if (diff <= 0) {
+        if (mainReserveBtn) {
+          mainReserveBtn.disabled = true;
+          mainReserveBtn.textContent = 'Offer ended';
+        }
+
+        // Time's up — force every product card's status to "Closed"
+        // (sold-out cards are untouched since they don't have these classes)
+        root.querySelectorAll('.prod-status-wrapper').forEach(wrapper => {
+          const activeStatus = wrapper.querySelector('.status-active');
+          const shippingStatus = wrapper.querySelector('.status-shipping');
+          if (activeStatus) activeStatus.textContent = 'Closed';
+          if (shippingStatus) shippingStatus.textContent = 'Closed';
+        });
       }
     }
     updateCountdown();
@@ -2677,7 +2747,6 @@
   "name": "Circle Member Offer",
   "settings": [
     { "type": "header", "content": "General" },
-    { "type": "checkbox", "id": "offer_enabled", "label": "Enable offer", "default": true },
     {
       "type": "text",
       "id": "access_codes",
@@ -2808,7 +2877,7 @@
     { "type": "color", "id": "muted_color", "label": "Muted text", "default": "#9a9792" },
     { "type": "color", "id": "border_color", "label": "Border / divider", "default": "#e2dfd9" },
     { "type": "color", "id": "accent_color", "label": "Accent (forest green)", "default": "#1a3a2a" },
-    { "type": "color", "id": "warning_color", "label": "Warning (scarcity)", "default": "#b8341b" },
+    { "type": "color", "id": "warning_color", "label": "Warning (scarcity)", "default": "#b8341b" }
   ],
   "presets": [{ "name": "Circle Member Offer" }]
 }

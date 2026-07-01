@@ -256,18 +256,19 @@
         The Circle is currently closed for new members.
       </div>
 
-      <p class="waitlist-text">
-        Join the waitlist and we'll notify you when we're accepting new members again.
-      </p>
+      
 
       {% form 'customer', class: 'circle-waitlist-form', id: 'circle-gate-waitlist-form-{{ sid }}' %}
         
         {% if form.posted_successfully? %}
-          <p class="waitlist-success-message" style="color: green; font-weight: bold; margin-top: 10px;">
-            You're on the waitlist-<br>
-            We'll notify you as soon as membership opens again.
+          <p class="waitlist-text">
+            You're on the waitlist. We'll let you know as soon as The Circle opens to new members.
           </p>
         {% else %}
+          <p class="waitlist-text">
+            Join the waitlist and we'll notify you when we're accepting new members again.
+          </p>
+
           <input type="hidden" name="contact[tags]" value="circle-waitlist">
           <input
             class="waitlist-input"

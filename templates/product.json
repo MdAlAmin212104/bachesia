@@ -27,15 +27,6 @@
           "type": "price",
           "settings": {}
         },
-        "text_K9e64z": {
-          "type": "text",
-          "settings": {
-            "text": "Last sizes - no restocking",
-            "font": "body",
-            "text_size": "text-base",
-            "icon": "none"
-          }
-        },
         "variant_picker": {
           "type": "variant_picker",
           "settings": {
@@ -159,7 +150,6 @@
         "custom_liquid_X7T9E3",
         "title",
         "price",
-        "text_K9e64z",
         "variant_picker",
         "inventory_status_QDQHj3",
         "icon_list_yqFYGm",
